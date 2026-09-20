@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="card">
+    <view class="section-title">数据备份</view>
+    <view class="section-desc">将当前用户的所有数据导出为 JSON 格式，可以复制保存到其他地方</view>
+    <button class="btn btn-green block" bindtap="exportData">导出数据</button>
+    <button class="btn btn-plain block" bindtap="importData">导入数据</button>
+  </view>
+
+  <view class="card" wx:if="{{users.length > 1}}">
+    <view class="section-title">用户列表</view>
+    <view class="section-desc">本设备上使用过的用户（家庭共享）</view>
+    <view class="user-list">
+      <view wx:for="{{users}}" wx:key="openid" class="user-item" bindtap="switchUser" data-openid="{{item.openid}}" data-nickname="{{item.nickname}}">
+        <image wx:if="{{item.avatar}}" class="user-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+        <view wx:else class="user-avatar-placeholder">{{item.nickname[0]}}</view>
+        <view class="user-info">
+          <view class="user-name">{{item.nickname}}</view>
+          <view class="user-id">{{item.openid}}</view>
+        </view>
+        <view class="user-action">查看数据 ›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">数据统计</view>
+    <button class="btn btn-plain block" bindtap="viewStats">查看统计图表</button>
+  </view>
+
+  <!-- 导出数据弹窗 -->
+  <view wx:if="{{showExport}}" class="modal-mask" bindtap="closeExport">
+    <view class="modal-box export-modal" catchtap="">
+      <view class="modal-title">导出数据</view>
+      <view class="export-tip">请复制以下 JSON 数据并保存</view>
+      <textarea class="export-textarea" value="{{exportData}}" readonly maxlength="-1"></textarea>
+      <view class="modal-actions">
+        <button class="btn btn-grey half" bindtap="closeExport">关闭</button>
+        <button class="btn btn-green half" bindtap="copyExportData">复制</button>
+      </view>
+    </view>
+  </view>
+</view>

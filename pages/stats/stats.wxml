@@ -1,0 +1,51 @@
+<view class="head">
+  <view class="head-stats">
+    <view class="head-item">
+      <view class="head-num">¥{{receiveTotal}}</view>
+      <view class="muted-light">收礼合计</view>
+    </view>
+    <view class="head-item">
+      <view class="head-num">¥{{giftTotal}}</view>
+      <view class="muted-light">送礼合计</view>
+    </view>
+  </view>
+  <view class="head-stats" style="margin-top:24rpx;">
+    <view class="head-item">
+      <view class="head-num small">现金 ¥{{cashTotal}} <text class="sub">（{{cashCount}} 笔）</text></view>
+    </view>
+    <view class="head-item">
+      <view class="head-num small">微信 ¥{{wechatTotal}} <text class="sub">（{{wechatCount}} 笔）</text></view>
+    </view>
+  </view>
+  <view class="balance-line">人情结余：¥{{balance}}（收礼 − 送礼）</view>
+</view>
+
+<view class="card">
+  <view class="chart-title">收礼 / 送礼对比（近6个月）</view>
+  <view class="bar-chart">
+    <view wx:for="{{months}}" wx:key="label" class="bar-item">
+      <view class="bars">
+        <view class="bar bar-in" style="height: {{item.receive / monthMax * 260}}rpx;"></view>
+        <view class="bar bar-out" style="height: {{item.gift / monthMax * 260}}rpx;"></view>
+      </view>
+      <view class="bar-label">{{item.label}}</view>
+    </view>
+  </view>
+  <view class="legend">
+    <view class="legend-item"><view class="dot dot-in"></view>收礼</view>
+    <view class="legend-item"><view class="dot dot-out"></view>送礼</view>
+  </view>
+</view>
+
+<view class="card">
+  <view class="chart-title">礼金总额占比（扇形图）</view>
+  <view class="pie-wrap">
+    <canvas type="2d" id="pieCanvas" class="pie-canvas"></canvas>
+  </view>
+  <view class="legend">
+    <view wx:for="{{pieGroups}}" wx:key="name" class="legend-item">
+      <view class="dot" style="background: {{item.color}};"></view>
+      {{item.name}} ¥{{item.value}}
+    </view>
+  </view>
+</view>

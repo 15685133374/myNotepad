@@ -1,0 +1,55 @@
+.head {
+  background: #0C3B2E;
+  padding: 56rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 28rpx;
+  background: #fff;
+  color: #0C3B2E;
+  font-size: 60rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-img {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255,255,255,.3);
+}
+.head-name { color: #fff; font-size: 36rpx; font-weight: 700; margin-top: 20rpx; }
+.muted-light { color: rgba(255,255,255,.7); font-size: 24rpx; margin-top: 8rpx; }
+.user-id { color: rgba(255,255,255,.5); font-size: 20rpx; margin-top: 8rpx; }
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #f0f2f1;
+}
+.cell:last-child { border-bottom: none; }
+.cell-left { display: flex; align-items: center; font-size: 28rpx; }
+.cell-icon { margin-right: 16rpx; font-size: 32rpx; }
+.cell-right { color: #8a978f; font-size: 24rpx; }
+.danger { color: #d4380d; }
+
+.foot {
+  text-align: center;
+  color: #8a978f;
+  font-size: 22rpx;
+  margin: 40rpx 0;
+}
+
+.about-text {
+  font-size: 26rpx;
+  color: #4a5a52;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}

@@ -1,0 +1,48 @@
+<view class="head">
+  <view class="head-name">{{name}}</view>
+  <view class="head-stats">
+    <view class="head-item">
+      <view class="head-num green">¥{{inTotal}}</view>
+      <view class="muted-light">收到的礼</view>
+    </view>
+    <view class="head-item">
+      <view class="head-num orange">¥{{outTotal}}</view>
+      <view class="muted-light">送出的礼</view>
+    </view>
+    <view class="head-item">
+      <view class="head-num">¥{{balance}}</view>
+      <view class="muted-light">人情结余</view>
+    </view>
+  </view>
+</view>
+
+<view class="tabs">
+  <view class="tab {{tab === 'receive' ? 'active' : ''}}" bindtap="setTab" data-key="receive">收到的礼（{{receives.length}}）</view>
+  <view class="tab {{tab === 'gift' ? 'active' : ''}}" bindtap="setTab" data-key="gift">送出的礼（{{gifts.length}}）</view>
+</view>
+
+<block wx:if="{{tab === 'receive'}}">
+  <view wx:if="{{receives.length === 0}}" class="empty">暂无收礼记录</view>
+  <view wx:for="{{receives}}" wx:key="id" class="card record" bindtap="editReceive" data-id="{{item.id}}">
+    <view class="record-info">
+      <view class="row">
+        <text class="amount">¥{{item.amountText}}</text>
+        <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
+      </view>
+      <view class="muted">{{item.bookName}} · {{item.timeText}}<text wx:if="{{item.note}}"> · {{item.note}}</text></view>
+    </view>
+  </view>
+</block>
+
+<block wx:else>
+  <view wx:if="{{gifts.length === 0}}" class="empty">暂无送礼记录</view>
+  <view wx:for="{{gifts}}" wx:key="id" class="card record" bindtap="editGift" data-id="{{item.id}}">
+    <view class="record-info">
+      <view class="row">
+        <text class="amount">¥{{item.amountText}}</text>
+        <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
+      </view>
+      <view class="muted">{{item.dateText}} · {{item.event || '未填事由'}}<text wx:if="{{item.note}}"> · {{item.note}}</text></view>
+    </view>
+  </view>
+</block>

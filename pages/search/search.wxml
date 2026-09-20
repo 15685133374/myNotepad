@@ -1,0 +1,57 @@
+<view class="head">
+  <view class="head-title">全局检索</view>
+  <view class="muted-light">支持搜索礼簿、收礼、送礼记录</view>
+  <view class="search-bar">
+    <text class="search-icon">🔍</text>
+    <input class="search-input" placeholder="输入姓名 / 礼簿 / 事由 / 备注" value="{{keyword}}" bindinput="onKeyword" focus confirm-type="search" />
+    <text wx:if="{{keyword}}" class="clear" bindtap="clear">✕</text>
+  </view>
+</view>
+
+<view wx:if="{{!searched}}" class="empty">输入关键词开始搜索</view>
+
+<block wx:if="{{searched}}">
+  <view wx:if="{{books.length === 0 && receives.length === 0 && gifts.length === 0}}" class="empty">没有找到相关记录</view>
+
+  <view wx:if="{{books.length}}" class="section">
+    <view class="section-title">礼簿（{{books.length}}）</view>
+    <view wx:for="{{books}}" wx:key="id" class="card row" bindtap="goBook" data-id="{{item.id}}">
+      <text class="section-icon">📒</text>
+      <view class="section-name">
+        <text wx:for="{{item.nameSegs}}" wx:for-item="seg" wx:key="index" class="{{seg.hit ? 'hl' : ''}}">{{seg.t}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{receives.length}}" class="section">
+    <view class="section-title">收礼记录（{{receives.length}}）</view>
+    <view wx:for="{{receives}}" wx:key="id" class="card row between" bindtap="goReceive" data-id="{{item.id}}">
+      <view class="record-info">
+        <view class="row">
+          <text class="record-name">
+            <text wx:for="{{item.nameSegs}}" wx:for-item="seg" wx:key="index" class="{{seg.hit ? 'hl' : ''}}">{{seg.t}}</text>
+          </text>
+          <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
+        </view>
+        <view class="muted">{{item.timeText}}<text wx:if="{{item.noteSegs}}"> · <text wx:for="{{item.noteSegs}}" wx:for-item="seg" wx:for-index="j" wx:key="j" class="{{seg.hit ? 'hl' : ''}}">{{seg.t}}</text></text></view>
+      </view>
+      <view class="amount">¥{{item.amountText}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{gifts.length}}" class="section">
+    <view class="section-title">送礼记录（{{gifts.length}}）</view>
+    <view wx:for="{{gifts}}" wx:key="id" class="card row between" bindtap="goGift" data-id="{{item.id}}">
+      <view class="record-info">
+        <view class="row">
+          <text class="record-name">
+            <text wx:for="{{item.nameSegs}}" wx:for-item="seg" wx:key="index" class="{{seg.hit ? 'hl' : ''}}">{{seg.t}}</text>
+          </text>
+          <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
+        </view>
+        <view class="muted">{{item.dateText}}<text wx:if="{{item.eventSegs}}"> · <text wx:for="{{item.eventSegs}}" wx:for-item="seg" wx:for-index="j" wx:key="j" class="{{seg.hit ? 'hl' : ''}}">{{seg.t}}</text></text><text wx:if="{{item.noteSegs}}"> · <text wx:for="{{item.noteSegs}}" wx:for-item="seg" wx:for-index="k" wx:key="k" class="{{seg.hit ? 'hl' : ''}}">{{seg.t}}</text></text></view>
+      </view>
+      <view class="amount">¥{{item.amountText}}</view>
+    </view>
+  </view>
+</block>

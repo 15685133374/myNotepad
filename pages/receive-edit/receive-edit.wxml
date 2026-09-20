@@ -1,0 +1,31 @@
+<view class="card">
+  <view class="field">
+    <view class="label">姓名</view>
+    <input class="input" placeholder="请输入送礼人姓名" value="{{name}}" bindinput="onName" bindfocus="onNameFocus" bindblur="onNameBlur" maxlength="20" />
+    <view wx:if="{{nameSuggestions.length}}" class="suggest-list">
+      <view wx:for="{{nameSuggestions}}" wx:key="*this" class="suggest-item" bindtap="pickName" data-name="{{item}}">{{item}}</view>
+    </view>
+    <view wx:if="{{dupWarning}}" class="warning">提示：该礼簿中已存在「{{name}}」的记录，请确认是否为同一人</view>
+  </view>
+
+  <view class="field">
+    <view class="label">金额</view>
+    <input class="input" type="digit" placeholder="0.00" value="{{amount}}" bindinput="onAmount" />
+  </view>
+
+  <view class="field">
+    <view class="label">支付方式</view>
+    <view class="pay-types">
+      <view class="pay-item {{payType === 'cash' ? 'active' : ''}}" bindtap="setPayType" data-type="cash">💵 现金</view>
+      <view class="pay-item {{payType === 'wechat' ? 'active' : ''}}" bindtap="setPayType" data-type="wechat">💬 微信</view>
+    </view>
+  </view>
+
+  <view class="field">
+    <view class="label">备注（选填）</view>
+    <input class="input" placeholder="如：大舅家" value="{{note}}" bindinput="onNote" maxlength="50" />
+  </view>
+</view>
+
+<button class="btn btn-green block save-btn" bindtap="save">保存</button>
+<button wx:if="{{id}}" class="btn btn-danger block save-btn" bindtap="remove">删除记录</button>

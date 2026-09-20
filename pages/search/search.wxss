@@ -1,0 +1,31 @@
+.head {
+  background: #0C3B2E;
+  padding: 40rpx 24rpx;
+}
+.head-title { color: #fff; font-size: 40rpx; font-weight: 700; }
+.muted-light { color: rgba(255,255,255,.7); font-size: 24rpx; margin-top: 8rpx; }
+
+.search-bar {
+  margin-top: 28rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 16rpx 24rpx;
+  display: flex;
+  align-items: center;
+}
+.search-icon { font-size: 26rpx; margin-right: 12rpx; opacity: .6; }
+.search-input { flex: 1; font-size: 28rpx; }
+.clear { color: #8a978f; padding: 0 8rpx; font-size: 28rpx; }
+
+.section { margin-top: 8rpx; }
+.section-title {
+  margin: 24rpx 24rpx 4rpx;
+  font-size: 26rpx;
+  color: #4a5a52;
+  font-weight: 600;
+}
+.section-icon { font-size: 36rpx; margin-right: 16rpx; }
+.section-name { font-size: 30rpx; font-weight: 600; }
+
+.record-info { flex: 1; overflow: hidden; }
+.record-name { font-size: 30rpx; font-weight: 600; }

@@ -1,0 +1,42 @@
+<view class="card">
+  <view class="field">
+    <view class="label">对方姓名</view>
+    <input class="input" placeholder="请输入姓名" value="{{name}}" bindinput="onName" bindfocus="onNameFocus" bindblur="onNameBlur" maxlength="20" />
+    <view wx:if="{{nameSuggestions.length}}" class="suggest-list">
+      <view wx:for="{{nameSuggestions}}" wx:key="*this" class="suggest-item" bindtap="pickName" data-name="{{item}}">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="field">
+    <view class="label">金额</view>
+    <input class="input" type="digit" placeholder="0.00" value="{{amount}}" bindinput="onAmount" />
+  </view>
+
+  <view class="field">
+    <view class="label">事由</view>
+    <input class="input" placeholder="如：婚宴、满月酒、乔迁" value="{{event}}" bindinput="onEvent" maxlength="30" />
+  </view>
+
+  <view class="field">
+    <view class="label">日期</view>
+    <picker mode="date" value="{{date}}" bindchange="onDate">
+      <view class="input picker-view">{{date}}</view>
+    </picker>
+  </view>
+
+  <view class="field">
+    <view class="label">支付方式</view>
+    <view class="pay-types">
+      <view class="pay-item {{payType === 'cash' ? 'active' : ''}}" bindtap="setPayType" data-type="cash">💵 现金</view>
+      <view class="pay-item {{payType === 'wechat' ? 'active' : ''}}" bindtap="setPayType" data-type="wechat">💬 微信</view>
+    </view>
+  </view>
+
+  <view class="field">
+    <view class="label">备注（选填）</view>
+    <input class="input" placeholder="选填" value="{{note}}" bindinput="onNote" maxlength="50" />
+  </view>
+</view>
+
+<button class="btn btn-green block save-btn" bindtap="save">保存</button>
+<button wx:if="{{id}}" class="btn btn-danger block save-btn" bindtap="remove">删除记录</button>

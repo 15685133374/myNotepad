@@ -1,0 +1,101 @@
+.page {
+  padding-bottom: 40rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.section-desc {
+  font-size: 24rpx;
+  color: #8a978f;
+  margin-bottom: 20rpx;
+  line-height: 1.6;
+}
+
+.block {
+  width: 100%;
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.user-list {
+  margin-top: 20rpx;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f2f1;
+}
+
+.user-item:last-child {
+  border-bottom: none;
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.user-avatar-placeholder {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #0C3B2E;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+}
+
+.user-info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.user-name {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.user-id {
+  font-size: 22rpx;
+  color: #8a978f;
+  margin-top: 4rpx;
+}
+
+.user-action {
+  color: #8a978f;
+  font-size: 24rpx;
+}
+
+.export-modal {
+  width: 650rpx;
+  max-height: 80vh;
+}
+
+.export-tip {
+  font-size: 24rpx;
+  color: #8a978f;
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+.export-textarea {
+  width: 100%;
+  height: 500rpx;
+  background: #f4f6f5;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 22rpx;
+  font-family: monospace;
+  box-sizing: border-box;
+  margin-bottom: 20rpx;
+}

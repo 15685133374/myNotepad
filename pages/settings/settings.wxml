@@ -1,0 +1,52 @@
+<view class="head">
+  <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="avatar-img" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+  <view wx:else class="logo">礼</view>
+  <view class="head-name">{{userInfo && userInfo.nickName ? userInfo.nickName : '阿秀礼簿'}}</view>
+  <view class="muted-light">人情往来 · 礼金记账</view>
+  <view class="user-id">ID: {{openid}}</view>
+</view>
+
+<view class="card">
+  <view class="cell" bindtap="goStats">
+    <view class="cell-left"><text class="cell-icon">📊</text>数据统计</view>
+    <view class="cell-right">条形图 · 扇形图 ›</view>
+  </view>
+  <view class="cell" bindtap="goSearch">
+    <view class="cell-left"><text class="cell-icon">🔍</text>全局检索</view>
+    <view class="cell-right">搜索全部记录 ›</view>
+  </view>
+  <view class="cell" bindtap="goBackup">
+    <view class="cell-left"><text class="cell-icon">💾</text>数据管理</view>
+    <view class="cell-right">备份 · 导入 · 用户 ›</view>
+  </view>
+</view>
+
+<view class="card">
+  <view class="cell" bindtap="toggleLock">
+    <view class="cell-left"><text class="cell-icon">🔒</text>密码锁</view>
+    <view class="cell-right">{{hasPassword ? '已开启，点击关闭' : '未开启，点击设置'}} ›</view>
+  </view>
+  <view class="cell" bindtap="clearAll">
+    <view class="cell-left"><text class="cell-icon">🗑️</text>清空数据</view>
+    <view class="cell-right danger">删除全部记录 ›</view>
+  </view>
+</view>
+
+<view class="card">
+  <view class="cell" bindtap="openAbout">
+    <view class="cell-left"><text class="cell-icon">ℹ️</text>关于我们</view>
+    <view class="cell-right">›</view>
+  </view>
+</view>
+
+<view class="foot">数据仅保存在本机，不上传任何服务器</view>
+
+<view wx:if="{{showAbout}}" class="modal-mask" bindtap="closeAbout">
+  <view class="modal-box" catchtap="">
+    <view class="modal-title">关于阿秀礼簿</view>
+    <view class="about-text">{{aboutText}}</view>
+    <view class="modal-actions">
+      <button class="btn btn-green half" bindtap="closeAbout">我知道了</button>
+    </view>
+  </view>
+</view>

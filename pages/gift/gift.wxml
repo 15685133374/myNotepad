@@ -1,0 +1,36 @@
+<view class="head">
+  <view class="head-top">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索姓名、事由..." value="{{keyword}}" bindinput="onKeyword" />
+    </view>
+    <picker wx:if="{{years.length}}" mode="selector" range="{{years}}" value="{{yearIndex}}" bindchange="onYearChange">
+      <view class="year-picker">{{years[yearIndex]}} 年 ▾</view>
+    </picker>
+  </view>
+  <view class="total">¥{{stats.totalText}}</view>
+  <view class="muted-light">共 {{stats.count}} 笔 · 现金 ¥{{stats.cashTotal}} · 微信 ¥{{stats.wechatTotal}}</view>
+  <view class="range-row">
+    <view wx:for="{{ranges}}" wx:key="key" class="range-item {{range === item.key ? 'active' : ''}}" bindtap="setRange" data-key="{{item.key}}">{{item.label}}</view>
+  </view>
+  <view class="muted-light range-summary">{{range === 'all' ? '全部' : ''}}区间合计 ¥{{rangeTotal}}（{{rangeCount}} 笔）</view>
+</view>
+
+<view wx:if="{{records.length === 0}}" class="empty">
+  <view>暂无送礼记录</view>
+  <view style="margin-top:10rpx;">点击下方按钮记录一笔人情支出</view>
+</view>
+
+<view wx:for="{{records}}" wx:key="id" class="card record" data-id="{{item.id}}" bindtap="onRecordAction">
+  <view class="avatar" catchtap="goPerson" data-name="{{item.name}}">{{item.name[0]}}</view>
+  <view class="record-info">
+    <view class="row">
+      <text class="record-name">{{item.name}}</text>
+      <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
+    </view>
+    <view class="muted">{{item.dateText}} · {{item.event || '未填事由'}}<text wx:if="{{item.note}}"> · {{item.note}}</text></view>
+  </view>
+  <view class="amount">¥{{item.amountText}}</view>
+</view>
+
+<view class="fab" bindtap="addRecord">＋ 记送礼</view>

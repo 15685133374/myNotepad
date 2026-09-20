@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/gift/gift",
+    "pages/settings/settings",
+    "pages/book/book",
+    "pages/receive-edit/receive-edit",
+    "pages/gift-edit/gift-edit",
+    "pages/person/person",
+    "pages/search/search",
+    "pages/stats/stats",
+    "pages/lock/lock",
+    "pages/backup/backup"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#0C3B2E",
+    "navigationBarTitleText": "阿秀礼簿",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0C3B2E",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#8a978f",
+    "selectedColor": "#0C3B2E",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "礼簿" },
+      { "pagePath": "pages/gift/gift", "text": "送礼" },
+      { "pagePath": "pages/settings/settings", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

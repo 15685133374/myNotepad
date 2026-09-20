@@ -1,0 +1,47 @@
+.head {
+  background: #0C3B2E;
+  padding: 40rpx 32rpx 48rpx;
+  color: #fff;
+}
+.muted-light { color: rgba(255,255,255,.7); font-size: 24rpx; }
+.total { font-size: 64rpx; font-weight: 700; margin-top: 8rpx; }
+.sub-stats { display: flex; margin-top: 28rpx; }
+.sub-item {
+  flex: 1;
+  background: rgba(255,255,255,.1);
+  border-radius: 12rpx;
+  padding: 18rpx 22rpx;
+  font-size: 26rpx;
+}
+.sub-item + .sub-item { margin-left: 20rpx; }
+.sub-amount { font-size: 32rpx; font-weight: 600; margin-top: 6rpx; }
+
+.search-bar {
+  margin: 20rpx 24rpx 0;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 14rpx 24rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(12, 59, 46, 0.05);
+}
+.search-icon { font-size: 26rpx; margin-right: 12rpx; opacity: .6; }
+.search-input { flex: 1; font-size: 26rpx; }
+
+.record { display: flex; align-items: center; }
+.record-info { flex: 1; margin-left: 20rpx; overflow: hidden; }
+.record-name { font-size: 30rpx; font-weight: 600; }
+
+.fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 48rpx;
+  background: #0C3B2E;
+  color: #fff;
+  padding: 22rpx 72rpx;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(12, 59, 46, .35);
+  z-index: 10;
+}

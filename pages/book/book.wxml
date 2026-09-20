@@ -1,0 +1,38 @@
+<view class="head">
+  <view class="muted-light">实时总收入</view>
+  <view class="total">¥{{stats.totalText}}</view>
+  <view class="sub-stats">
+    <view class="sub-item">
+      <view>现金 <text class="tag tag-cash">{{stats.cashCount}} 笔</text></view>
+      <view class="sub-amount">¥{{stats.cashTotal}}</view>
+    </view>
+    <view class="sub-item">
+      <view>微信 <text class="tag tag-wechat">{{stats.wechatCount}} 笔</text></view>
+      <view class="sub-amount">¥{{stats.wechatTotal}}</view>
+    </view>
+  </view>
+</view>
+
+<view class="search-bar">
+  <text class="search-icon">🔍</text>
+  <input class="search-input" placeholder="搜索姓名、备注..." value="{{keyword}}" bindinput="onKeyword" />
+</view>
+
+<view wx:if="{{records.length === 0}}" class="empty">
+  <view>暂无收礼记录</view>
+  <view style="margin-top:10rpx;">点击下方按钮录入第一笔礼金</view>
+</view>
+
+<view wx:for="{{records}}" wx:key="id" class="card record" data-id="{{item.id}}" bindtap="onRecordAction">
+  <view class="avatar" catchtap="goPerson" data-name="{{item.name}}">{{item.name[0]}}</view>
+  <view class="record-info">
+    <view class="row">
+      <text class="record-name">{{item.name}}</text>
+      <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
+    </view>
+    <view class="muted">{{item.timeText}}<text wx:if="{{item.note}}"> · {{item.note}}</text></view>
+  </view>
+  <view class="amount">¥{{item.amountText}}</view>
+</view>
+
+<view class="fab" bindtap="addRecord">＋ 录礼金</view>
