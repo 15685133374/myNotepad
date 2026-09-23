@@ -1,10 +1,17 @@
 // 数据存储层：支持多用户，数据按 openid 隔离存储
 // 模拟服务端数据库的功能，实际数据存储在本地
 
-// 获取当前用户的 openid
+// 获取当前用户的 openid（安全版本，不依赖 getApp()）
 function getCurrentOpenid() {
-  const app = getApp();
-  return app.globalData.openid || wx.getStorageSync('lb_openid') || 'default_user';
+  // 优先从本地存储读取，避免在 App 实例未初始化时调用 getApp() 报错
+  const saved = wx.getStorageSync('lb_openid');
+  if (saved) return saved;
+  try {
+    const app = getApp();
+    return app && app.globalData && app.globalData.openid ? app.globalData.openid : 'default_user';
+  } catch (e) {
+    return 'default_user';
+  }
 }
 
 // 生成用户专属的存储 key
@@ -71,12 +78,12 @@ function getBook(id) {
   return getBooks().find(b => b.id === id) || null; 
 }
 
-function addBook(name) {
+function addBook(name, date) {
   const list = getBooks();
   const book = { 
     id: genId(), 
     name, 
-    createdAt: Date.now(),
+    createdAt: date ? new Date(date).getTime() : Date.now(),
     openid: getCurrentOpenid() // 记录创建者
   };
   list.unshift(book);
@@ -301,5 +308,5 @@ module.exports = {
   getGifts, getGift, addGift, updateGift, deleteGift,
   bookStats, allReceiveStats, giftStats, calcStats,
   getAllNames, personRecords, rangeStart, searchAll, clearAll,
-  getCurrentOpenid, getAllUsers
+  getCurrentOpenid, getAllUsers, getUserKey
 };

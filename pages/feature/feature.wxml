@@ -1,0 +1,27 @@
+<view class="page">
+  <!-- 顶部进度 -->
+  <view class="progress-bar">
+    <view wx:for="{{features}}" wx:key="title" class="dot {{index <= current ? 'active' : ''}}"></view>
+  </view>
+
+  <!-- 功能卡片轮播 -->
+  <swiper class="feature-swiper" current="{{current}}" bindchange="swiperChange" duration="300" easing-function="easeOutCubic">
+    <swiper-item wx:for="{{features}}" wx:key="title">
+      <view class="feature-card">
+        <view class="feature-icon">{{item.icon}}</view>
+        <view class="feature-title">{{item.title}}</view>
+        <view class="feature-desc">{{item.desc}}</view>
+
+        <view class="feature-points">
+          <view wx:for="{{item.points}}" wx:for-item="point" wx:key="*this" class="point-item">
+            <text class="point-check">✓</text>
+            <text class="point-text">{{point}}</text>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 底部指示器 -->
+  <view class="nav-indicator">{{current + 1}} / {{features.length}}</view>
+</view>

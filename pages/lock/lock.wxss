@@ -1,4 +1,4 @@
-page { background: #0C3B2E; }
+page { background: #4CAF50; }
 
 .wrap {
   padding: 120rpx 48rpx;
@@ -13,17 +13,19 @@ page { background: #0C3B2E; }
 .pwd-input {
   width: 100%;
   box-sizing: border-box;
-  background: rgba(255,255,255,.14);
+  background: #fff;
   border-radius: 12rpx;
   padding: 22rpx 28rpx;
-  color: #fff;
+  color: #333;
   font-size: 30rpx;
+  line-height: 40rpx;
+  height: 84rpx;
   margin-top: 28rpx;
 }
 
 .error { color: #ffb4a2; margin-top: 20rpx; }
 
-.confirm-btn { margin-top: 40rpx; background: #fff; color: #0C3B2E; font-weight: 600; }
+.confirm-btn { margin-top: 40rpx; background: #fff; color: #4CAF50; font-weight: 600; }
 
 .forgot {
   color: rgba(255,255,255,.6);

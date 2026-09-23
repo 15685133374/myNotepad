@@ -27,7 +27,8 @@ Page({
       .filter(r => !kw || (r.name || '').toLowerCase().indexOf(kw) >= 0 || (r.note || '').toLowerCase().indexOf(kw) >= 0)
       .map(r => Object.assign({}, r, {
         amountText: store.fmtMoney(r.amount),
-        timeText: store.fmtTime(r.time)
+        timeText: store.fmtTime(r.time),
+        giftValueText: r.giftValue ? store.fmtMoney(r.giftValue) : ''
       }));
     this.setData({
       book,

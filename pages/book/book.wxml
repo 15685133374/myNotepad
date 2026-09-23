@@ -31,6 +31,7 @@
       <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
     </view>
     <view class="muted">{{item.timeText}}<text wx:if="{{item.note}}"> · {{item.note}}</text></view>
+    <view wx:if="{{item.giftItem}}" class="muted" style="margin-top:6rpx;">🎁 {{item.giftItem}}<text wx:if="{{item.giftValue}}">（价值 ¥{{item.giftValueText}}）</text></view>
   </view>
   <view class="amount">¥{{item.amountText}}</view>
 </view>

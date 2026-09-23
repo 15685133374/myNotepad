@@ -28,13 +28,36 @@
   </view>
 </view>
 
-<view wx:if="{{showCreate}}" class="modal-mask" bindtap="closeCreate">
+<view wx:if="{{showCreate}}" class="modal-mask">
   <view class="modal-box" catchtap="">
     <view class="modal-title">创建礼簿</view>
     <input class="input" placeholder="如：儿子婚宴、父亲七十大寿" value="{{newName}}" bindinput="onNameInput" focus maxlength="30" />
+    <picker class="date-picker" mode="date" value="{{newDate}}" bindchange="onDateChange">
+      <view class="date-display">
+        <text class="date-label">日期</text>
+        <text class="date-value">{{newDateText}}</text>
+      </view>
+    </picker>
     <view class="modal-actions">
       <button class="btn btn-grey half" bindtap="closeCreate">取消</button>
       <button class="btn btn-green half" bindtap="confirmCreate">创建</button>
+    </view>
+  </view>
+</view>
+
+<!-- 修改日期弹窗 -->
+<view wx:if="{{showEditDate}}" class="modal-mask">
+  <view class="modal-box" catchtap="">
+    <view class="modal-title">修改日期</view>
+    <picker class="date-picker" mode="date" value="{{editDate}}" bindchange="onEditDateChange">
+      <view class="date-display">
+        <text class="date-label">日期</text>
+        <text class="date-value">{{editDateText}}</text>
+      </view>
+    </picker>
+    <view class="modal-actions">
+      <button class="btn btn-grey half" bindtap="closeEditDate">取消</button>
+      <button class="btn btn-green half" bindtap="confirmEditDate">确定</button>
     </view>
   </view>
 </view>

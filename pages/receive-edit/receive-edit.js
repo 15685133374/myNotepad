@@ -6,6 +6,8 @@ Page({
     bookId: '',
     name: '',
     amount: '',
+    giftItem: '',
+    giftValue: '',
     payType: 'cash',
     note: '',
     nameSuggestions: [],
@@ -21,6 +23,8 @@ Page({
         this.setData({
           name: rec.name,
           amount: String(rec.amount),
+          giftItem: rec.giftItem || '',
+          giftValue: rec.giftValue ? String(rec.giftValue) : '',
           payType: rec.payType || 'cash',
           note: rec.note || '',
           bookId: rec.bookId
@@ -58,6 +62,12 @@ Page({
   onAmount(e) {
     this.setData({ amount: e.detail.value });
   },
+  onGiftItem(e) {
+    this.setData({ giftItem: e.detail.value });
+  },
+  onGiftValue(e) {
+    this.setData({ giftValue: e.detail.value });
+  },
   onNote(e) {
     this.setData({ note: e.detail.value });
   },
@@ -65,7 +75,7 @@ Page({
     this.setData({ payType: e.currentTarget.dataset.type });
   },
   save() {
-    const { id, bookId, name, amount, payType, note } = this.data;
+    const { id, bookId, name, amount, giftItem, giftValue, payType, note } = this.data;
     if (!name.trim()) {
       wx.showToast({ title: '请输入姓名', icon: 'none' });
       return;
@@ -75,7 +85,15 @@ Page({
       wx.showToast({ title: '请输入正确金额', icon: 'none' });
       return;
     }
-    const data = { name: name.trim(), amount: Math.round(num * 100) / 100, payType, note: note.trim() };
+    const giftValueNum = parseFloat(giftValue);
+    const data = { 
+      name: name.trim(), 
+      amount: Math.round(num * 100) / 100, 
+      giftItem: giftItem.trim(),
+      giftValue: giftValueNum > 0 ? Math.round(giftValueNum * 100) / 100 : 0,
+      payType, 
+      note: note.trim() 
+    };
     if (id) {
       store.updateReceive(id, data);
     } else {

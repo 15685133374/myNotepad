@@ -33,6 +33,10 @@
 </view>
 
 <view class="card">
+  <view class="cell" bindtap="goFeature">
+    <view class="cell-left"><text class="cell-icon">📖</text>功能介绍</view>
+    <view class="cell-right">查看全部功能 ›</view>
+  </view>
   <view class="cell" bindtap="openAbout">
     <view class="cell-left"><text class="cell-icon">ℹ️</text>关于我们</view>
     <view class="cell-right">›</view>

@@ -12,7 +12,7 @@ Page({
     const app = getApp();
     const openid = store.getCurrentOpenid();
     this.setData({ 
-      hasPassword: !!wx.getStorageSync(store.KEYS.PASSWORD),
+      hasPassword: !!wx.getStorageSync(store.getUserKey(store.KEYS.PASSWORD)),
       userInfo: app.globalData.userInfo,
       openid: openid
     });
@@ -25,6 +25,9 @@ Page({
   },
   goBackup() {
     wx.navigateTo({ url: '/pages/backup/backup' });
+  },
+  goFeature() {
+    wx.navigateTo({ url: '/pages/feature/feature' });
   },
   toggleLock() {
     if (this.data.hasPassword) {
@@ -39,7 +42,7 @@ Page({
       content: '关闭后再次进入小程序将不再验证密码，确认关闭？',
       success: (r) => {
         if (r.confirm) {
-          wx.removeStorageSync(store.KEYS.PASSWORD);
+          wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
           this.setData({ hasPassword: false });
           wx.showToast({ title: '已关闭', icon: 'success' });
         }

@@ -18,6 +18,16 @@
   </view>
 
   <view class="field">
+    <view class="label">礼品（选填）</view>
+    <input class="input" placeholder="如：被子、衣服" value="{{giftItem}}" bindinput="onGiftItem" maxlength="30" />
+  </view>
+
+  <view class="field">
+    <view class="label">礼品价值（选填）</view>
+    <input class="input" type="digit" placeholder="0.00" value="{{giftValue}}" bindinput="onGiftValue" />
+  </view>
+
+  <view class="field">
     <view class="label">日期</view>
     <picker mode="date" value="{{date}}" bindchange="onDate">
       <view class="input picker-view">{{date}}</view>

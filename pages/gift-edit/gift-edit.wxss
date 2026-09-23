@@ -8,7 +8,7 @@
   border: 1rpx solid #e3e8e5;
   border-radius: 12rpx;
   margin-top: 8rpx;
-  box-shadow: 0 8rpx 24rpx rgba(12, 59, 46, .1);
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, .08);
 }
 .suggest-item {
   padding: 20rpx 24rpx;
@@ -23,13 +23,13 @@
   text-align: center;
   padding: 18rpx 0;
   border-radius: 12rpx;
-  background: #f4f6f5;
+  background: #F8F9FB;
   font-size: 28rpx;
   color: #4a5a52;
 }
 .pay-item + .pay-item { margin-left: 20rpx; }
 .pay-item.active {
-  background: #0C3B2E;
+  background: #4CAF50;
   color: #fff;
 }
 

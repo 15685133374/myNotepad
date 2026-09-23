@@ -1,5 +1,5 @@
 .head {
-  background: #0C3B2E;
+  background: #4CAF50;
   padding: 56rpx 32rpx;
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
   height: 120rpx;
   border-radius: 28rpx;
   background: #fff;
-  color: #0C3B2E;
+  color: #4CAF50;
   font-size: 60rpx;
   font-weight: 700;
   display: flex;

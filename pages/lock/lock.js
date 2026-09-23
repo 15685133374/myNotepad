@@ -29,12 +29,14 @@ Page({
         this.setData({ error: '两次输入的密码不一致' });
         return;
       }
-      wx.setStorageSync(store.KEYS.PASSWORD, pwd);
+      const key = store.getUserKey(store.KEYS.PASSWORD);
+      wx.setStorageSync(key, pwd);
+      console.log('[密码锁设置] key:', key, 'pwd:', pwd);
       getApp().globalData.unlocked = true;
       wx.showToast({ title: '密码锁已开启', icon: 'success' });
       setTimeout(() => wx.navigateBack(), 400);
     } else {
-      if (pwd === wx.getStorageSync(store.KEYS.PASSWORD)) {
+      if (pwd === wx.getStorageSync(store.getUserKey(store.KEYS.PASSWORD))) {
         getApp().globalData.unlocked = true;
         wx.reLaunch({ url: '/pages/index/index' });
       } else {
@@ -50,7 +52,7 @@ Page({
       success: (r) => {
         if (r.confirm) {
           store.clearAll();
-          wx.removeStorageSync(store.KEYS.PASSWORD);
+          wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
           getApp().globalData.unlocked = true;
           wx.reLaunch({ url: '/pages/index/index' });
         }

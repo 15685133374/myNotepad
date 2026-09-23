@@ -8,45 +8,39 @@ App({
 
   onLaunch() {
     this.wxLogin();
+    // 延迟检查密码锁，确保页面栈已准备好
+    setTimeout(() => this.checkLock(), 100);
   },
 
   // 微信登录
   wxLogin() {
+    // 优先使用已存储的 openid，避免每次 wx.login 生成新 code 导致数据"丢失"
+    const savedOpenid = wx.getStorageSync('lb_openid');
+    if (savedOpenid) {
+      this.globalData.openid = savedOpenid;
+      this.globalData.isLoggedIn = true;
+      const savedUserInfo = wx.getStorageSync('lb_userinfo');
+      if (savedUserInfo) {
+        this.globalData.userInfo = savedUserInfo;
+      }
+      return;
+    }
+
     wx.login({
       success: (res) => {
         if (res.code) {
-          // 家庭使用：直接用 code 作为临时用户标识
-          // 生产环境应该发送到后端换取 openid
-          console.log('微信登录成功，code:', res.code);
-          
-          // 模拟获取 openid（实际应调用后端接口）
-          // 这里用 code 的 hash 作为临时 openid
+          // 首次登录：用 code hash 生成临时 openid 并固定存储
           const tempOpenid = 'user_' + this.hashCode(res.code);
-          
           this.globalData.openid = tempOpenid;
           this.globalData.isLoggedIn = true;
-          
-          // 保存到本地
           wx.setStorageSync('lb_openid', tempOpenid);
-          
-          // 获取用户信息
           this.getUserProfile();
         } else {
           console.error('登录失败：' + res.errMsg);
-          wx.showToast({
-            title: '登录失败，请重试',
-            icon: 'none'
-          });
         }
       },
       fail: (err) => {
         console.error('wx.login 调用失败：', err);
-        // 使用本地存储的 openid（如果有）
-        const savedOpenid = wx.getStorageSync('lb_openid');
-        if (savedOpenid) {
-          this.globalData.openid = savedOpenid;
-          this.globalData.isLoggedIn = true;
-        }
       }
     });
   },
@@ -82,12 +76,26 @@ App({
     return Math.abs(hash).toString(36);
   },
 
+  // 检查密码锁
+  checkLock() {
+    const store = require('./utils/store');
+    const key = store.getUserKey(store.KEYS.PASSWORD);
+    const pwd = wx.getStorageSync(key);
+    console.log('[密码锁检查] key:', key, 'pwd:', pwd, 'unlocked:', this.globalData.unlocked);
+    if (pwd && !this.globalData.unlocked) {
+      wx.reLaunch({ url: '/pages/lock/lock?mode=unlock' });
+    }
+  },
+
   onShow() {
-    const pwd = wx.getStorageSync('lb_password');
+    // 页面切换时也检查，但排除锁屏页本身，并避免重复 reLaunch
+    const store = require('./utils/store');
+    const pwd = wx.getStorageSync(store.getUserKey(store.KEYS.PASSWORD));
     if (pwd && !this.globalData.unlocked) {
       const pages = getCurrentPages();
       const cur = pages.length ? pages[pages.length - 1].route : '';
-      if (cur !== 'pages/lock/lock') {
+      if (cur && cur !== 'pages/lock/lock') {
+        this.globalData.unlocked = false; // 重置解锁状态
         wx.reLaunch({ url: '/pages/lock/lock?mode=unlock' });
       }
     }

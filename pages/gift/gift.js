@@ -53,7 +53,8 @@ Page({
       years,
       records: list.map(g => Object.assign({}, g, {
         amountText: store.fmtMoney(g.amount),
-        dateText: store.fmtDate(g.date)
+        dateText: store.fmtDate(g.date),
+        giftValueText: g.giftValue ? store.fmtMoney(g.giftValue) : ''
       })),
       rangeTotal: store.fmtMoney(rangeList.reduce((sum, g) => sum + (Number(g.amount) || 0), 0)),
       rangeCount: rangeList.length,

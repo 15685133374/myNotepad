@@ -7,6 +7,8 @@ Page({
     id: '',
     name: '',
     amount: '',
+    giftItem: '',
+    giftValue: '',
     event: '',
     date: today(),
     payType: 'cash',
@@ -22,6 +24,8 @@ Page({
           id,
           name: g.name,
           amount: String(g.amount),
+          giftItem: g.giftItem || '',
+          giftValue: g.giftValue ? String(g.giftValue) : '',
           event: g.event || '',
           date: store.fmtDate(g.date),
           payType: g.payType || 'cash',
@@ -55,12 +59,14 @@ Page({
     this.setData({ name: e.currentTarget.dataset.name, nameSuggestions: [] });
   },
   onAmount(e) { this.setData({ amount: e.detail.value }); },
+  onGiftItem(e) { this.setData({ giftItem: e.detail.value }); },
+  onGiftValue(e) { this.setData({ giftValue: e.detail.value }); },
   onEvent(e) { this.setData({ event: e.detail.value }); },
   onNote(e) { this.setData({ note: e.detail.value }); },
   onDate(e) { this.setData({ date: e.detail.value }); },
   setPayType(e) { this.setData({ payType: e.currentTarget.dataset.type }); },
   save() {
-    const { id, name, amount, event, date, payType, note } = this.data;
+    const { id, name, amount, giftItem, giftValue, event, date, payType, note } = this.data;
     if (!name.trim()) {
       wx.showToast({ title: '请输入姓名', icon: 'none' });
       return;
@@ -70,9 +76,12 @@ Page({
       wx.showToast({ title: '请输入正确金额', icon: 'none' });
       return;
     }
+    const giftValueNum = parseFloat(giftValue);
     const data = {
       name: name.trim(),
       amount: Math.round(num * 100) / 100,
+      giftItem: giftItem.trim(),
+      giftValue: giftValueNum > 0 ? Math.round(giftValueNum * 100) / 100 : 0,
       event: event.trim(),
       date: new Date(date + 'T00:00:00').getTime(),
       payType,

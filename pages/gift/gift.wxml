@@ -2,7 +2,7 @@
   <view class="head-top">
     <view class="search-bar">
       <text class="search-icon">🔍</text>
-      <input class="search-input" placeholder="搜索姓名、事由..." value="{{keyword}}" bindinput="onKeyword" />
+      <input class="search-input" placeholder="搜索姓名、事由..." placeholder-style="color:rgba(255,255,255,.7)" cursor-color="#fff" value="{{keyword}}" bindinput="onKeyword" />
     </view>
     <picker wx:if="{{years.length}}" mode="selector" range="{{years}}" value="{{yearIndex}}" bindchange="onYearChange">
       <view class="year-picker">{{years[yearIndex]}} 年 ▾</view>
@@ -29,6 +29,7 @@
       <text class="tag {{item.payType === 'wechat' ? 'tag-wechat' : 'tag-cash'}}">{{item.payType === 'wechat' ? '微信' : '现金'}}</text>
     </view>
     <view class="muted">{{item.dateText}} · {{item.event || '未填事由'}}<text wx:if="{{item.note}}"> · {{item.note}}</text></view>
+    <view wx:if="{{item.giftItem}}" class="muted" style="margin-top:6rpx;">🎁 {{item.giftItem}}<text wx:if="{{item.giftValue}}">（价值 ¥{{item.giftValueText}}）</text></view>
   </view>
   <view class="amount">¥{{item.amountText}}</view>
 </view>

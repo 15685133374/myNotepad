@@ -10,18 +10,19 @@
     "pages/search/search",
     "pages/stats/stats",
     "pages/lock/lock",
-    "pages/backup/backup"
+    "pages/backup/backup",
+    "pages/feature/feature"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#0C3B2E",
+    "navigationBarBackgroundColor": "#4CAF50",
     "navigationBarTitleText": "阿秀礼簿",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#0C3B2E",
-    "backgroundTextStyle": "light"
+    "backgroundColor": "#F8F9FB",
+    "backgroundTextStyle": "dark"
   },
   "tabBar": {
-    "color": "#8a978f",
-    "selectedColor": "#0C3B2E",
+    "color": "#8c8c8c",
+    "selectedColor": "#4CAF50",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [
@@ -31,5 +32,6 @@
     ]
   },
   "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"
 }

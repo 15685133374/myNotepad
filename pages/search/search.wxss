@@ -1,5 +1,5 @@
 .head {
-  background: #0C3B2E;
+  background: #4CAF50;
   padding: 40rpx 24rpx;
 }
 .head-title { color: #fff; font-size: 40rpx; font-weight: 700; }

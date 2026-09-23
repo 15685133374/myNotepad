@@ -1,7 +1,7 @@
 const store = require('../../utils/store');
 
-const BAR_COLORS = ['#0C3B2E', '#2d6a4f', '#52b788', '#b7791f', '#d8a94e'];
-const PIE_COLORS = ['#0C3B2E', '#2d6a4f', '#52b788', '#95d5b2', '#b7791f', '#d8a94e', '#8a978f'];
+const BAR_COLORS = ['#4CAF50', '#66BB6A', '#81C784', '#faad14', '#ffc53d'];
+const PIE_COLORS = ['#4CAF50', '#66BB6A', '#81C784', '#A5D6A7', '#faad14', '#ffc53d', '#8c8c8c'];
 
 Page({
   data: {

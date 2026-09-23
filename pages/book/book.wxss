@@ -1,5 +1,5 @@
 .head {
-  background: #0C3B2E;
+  background: #4CAF50;
   padding: 40rpx 32rpx 48rpx;
   color: #fff;
 }
@@ -23,7 +23,7 @@
   padding: 14rpx 24rpx;
   display: flex;
   align-items: center;
-  box-shadow: 0 4rpx 16rpx rgba(12, 59, 46, 0.05);
+  box-shadow: 0 4rpx 16rpx rgba(76, 175, 80, 0.06);
 }
 .search-icon { font-size: 26rpx; margin-right: 12rpx; opacity: .6; }
 .search-input { flex: 1; font-size: 26rpx; }
@@ -37,11 +37,11 @@
   left: 50%;
   transform: translateX(-50%);
   bottom: 48rpx;
-  background: #0C3B2E;
+  background: #4CAF50;
   color: #fff;
   padding: 22rpx 72rpx;
   border-radius: 48rpx;
   font-size: 30rpx;
-  box-shadow: 0 8rpx 24rpx rgba(12, 59, 46, .35);
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, .35);
   z-index: 10;
 }

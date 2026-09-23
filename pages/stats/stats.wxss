@@ -1,5 +1,5 @@
 .head {
-  background: #0C3B2E;
+  background: #4CAF50;
   padding: 40rpx 32rpx 48rpx;
   color: #fff;
 }
@@ -35,8 +35,8 @@
   margin: 0 5rpx;
   min-height: 4rpx;
 }
-.bar-in { background: #0C3B2E; }
-.bar-out { background: #d8a94e; }
+.bar-in { background: #4CAF50; }
+.bar-out { background: #c9a84c; }
 .bar-label { font-size: 22rpx; color: #8a978f; margin-top: 10rpx; }
 
 .legend {
@@ -58,8 +58,8 @@
   border-radius: 50%;
   margin-right: 8rpx;
 }
-.dot-in { background: #0C3B2E; }
-.dot-out { background: #d8a94e; }
+.dot-in { background: #4CAF50; }
+.dot-out { background: #c9a84c; }
 
 .pie-wrap { display: flex; justify-content: center; }
 .pie-canvas { width: 420rpx; height: 420rpx; }

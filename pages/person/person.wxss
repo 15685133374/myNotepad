@@ -1,5 +1,5 @@
 .head {
-  background: #0C3B2E;
+  background: #4CAF50;
   padding: 40rpx 32rpx 48rpx;
   color: #fff;
 }
@@ -7,7 +7,7 @@
 .head-stats { display: flex; margin-top: 32rpx; }
 .head-item { flex: 1; }
 .head-num { font-size: 32rpx; font-weight: 700; }
-.head-num.green { color: #7fe0b2; }
+.head-num.green { color: #C8E6C9; }
 .head-num.orange { color: #ffd591; }
 .muted-light { color: rgba(255,255,255,.7); font-size: 24rpx; margin-top: 6rpx; }
 
@@ -25,9 +25,9 @@
   border-bottom: 4rpx solid transparent;
 }
 .tab.active {
-  color: #0C3B2E;
+  color: #4CAF50;
   font-weight: 600;
-  border-bottom-color: #0C3B2E;
+  border-bottom-color: #4CAF50;
 }
 
 .record { display: flex; align-items: center; }
