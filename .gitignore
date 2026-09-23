@@ -1,0 +1,17 @@
+# 打包文件
+*.zip
+
+# 依赖目录
+node_modules/
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/
+
+# 日志
+*.log
