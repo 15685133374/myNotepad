@@ -1,0 +1,14 @@
+{
+  "name": "mynotepad-server",
+  "version": "1.0.0",
+  "description": "阿秀礼簿后端服务 - 微信云托管 Express + MySQL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.5"
+  }
+}

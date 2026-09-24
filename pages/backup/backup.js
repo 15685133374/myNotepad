@@ -138,5 +138,66 @@ Page({
   // 查看数据统计
   viewStats() {
     wx.navigateTo({ url: '/pages/stats/stats' });
+  },
+
+  // 上传到云端备份
+  cloudBackup() {
+    if (!store.cloudOk()) {
+      wx.showToast({ title: '当前环境不支持云服务', icon: 'none' });
+      return;
+    }
+    wx.showLoading({ title: '备份中...', mask: true });
+    store.cloudLogin().then(openid => {
+      if (!openid) throw new Error('云登录失败');
+      return store.pushToCloud();
+    }).then(r => {
+      wx.hideLoading();
+      if (r) {
+        wx.showModal({
+          title: '备份成功',
+          content: `已上传：礼簿 ${r.books} 个、收礼 ${r.receives} 条、送礼 ${r.gifts} 条`,
+          showCancel: false
+        });
+      } else {
+        wx.showToast({ title: '备份失败，请稍后重试', icon: 'none' });
+      }
+    }).catch(() => {
+      wx.hideLoading();
+      wx.showToast({ title: '备份失败，请检查网络', icon: 'none' });
+    });
+  },
+
+  // 从云端恢复（覆盖本地）
+  cloudRestore() {
+    if (!store.cloudOk()) {
+      wx.showToast({ title: '当前环境不支持云服务', icon: 'none' });
+      return;
+    }
+    wx.showModal({
+      title: '从云端恢复',
+      content: '云端数据将覆盖本机现有数据，确定继续？',
+      confirmColor: '#e64340',
+      success: (res) => {
+        if (!res.confirm) return;
+        wx.showLoading({ title: '恢复中...', mask: true });
+        store.cloudLogin().then(openid => {
+          if (!openid) throw new Error('云登录失败');
+          return store.pullFromCloud();
+        }).then(ok => {
+          wx.hideLoading();
+          if (ok) {
+            wx.showToast({ title: '恢复成功', icon: 'success' });
+            setTimeout(() => {
+              wx.switchTab({ url: '/pages/index/index' });
+            }, 1200);
+          } else {
+            wx.showToast({ title: '恢复失败，请稍后重试', icon: 'none' });
+          }
+        }).catch(() => {
+          wx.hideLoading();
+          wx.showToast({ title: '恢复失败，请检查网络', icon: 'none' });
+        });
+      }
+    });
   }
 });

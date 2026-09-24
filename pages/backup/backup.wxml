@@ -1,5 +1,12 @@
 <view class="page">
   <view class="card">
+    <view class="section-title">云端备份</view>
+    <view class="section-desc">数据加密存储在微信云托管，换手机也不怕丢</view>
+    <button class="btn btn-green block" bindtap="cloudBackup">备份到云端</button>
+    <button class="btn btn-plain block" bindtap="cloudRestore">从云端恢复</button>
+  </view>
+
+  <view class="card">
     <view class="section-title">数据备份</view>
     <view class="section-desc">将当前用户的所有数据导出为 JSON 格式，可以复制保存到其他地方</view>
     <button class="btn btn-green block" bindtap="exportData">导出数据</button>

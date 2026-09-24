@@ -32,6 +32,17 @@
   </view>
 </view>
 
+<view class="card" wx:if="{{cloudEnabled}}">
+  <view class="cell" bindtap="syncNow">
+    <view class="cell-left"><text class="cell-icon">☁️</text>云端同步</view>
+    <view class="cell-right">
+      <block wx:if="{{syncing}}">同步中...</block>
+      <block wx:elif="{{pendingCount > 0}}">{{pendingCount}} 条待同步 ›</block>
+      <block wx:else>已全部同步 ✓</block>
+    </view>
+  </view>
+</view>
+
 <view class="card">
   <view class="cell" bindtap="goFeature">
     <view class="cell-left"><text class="cell-icon">📖</text>功能介绍</view>
@@ -43,7 +54,7 @@
   </view>
 </view>
 
-<view class="foot">数据仅保存在本机，不上传任何服务器</view>
+<view class="foot">数据保存在本机{{cloudEnabled ? '，联网时自动云端备份' : ''}}</view>
 
 <view wx:if="{{showAbout}}" class="modal-mask" bindtap="closeAbout">
   <view class="modal-box" catchtap="">
