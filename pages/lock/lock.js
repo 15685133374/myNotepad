@@ -118,7 +118,7 @@ Page({
   unlockFail() {
     const errCount = this.data.errorCount + 1;
     wx.setStorageSync('lb_lock_err_count', errCount);
-    this.setData({ errorCount, pwd: '' });
+    this.setData({ errorCount: errCount, pwd: '' });
 
     if (errCount >= MAX_ERROR) {
       const lockedUntil = Date.now() + LOCK_TIMEOUT * 1000;
