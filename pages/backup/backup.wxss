@@ -22,6 +22,25 @@
   box-sizing: border-box;
 }
 
+.sync-status {
+  background: #f6f8f7;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.sync-status-text {
+  font-size: 28rpx;
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.sync-time {
+  font-size: 22rpx;
+  color: #8a978f;
+  margin-top: 8rpx;
+}
+
 .user-list {
   margin-top: 20rpx;
 }

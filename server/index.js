@@ -370,6 +370,19 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
+// ---------------- 清空当前用户数据 ----------------
+app.delete('/api/clear', auth, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM books WHERE openid = ?', [req.openid]);
+    await pool.query('DELETE FROM receives WHERE openid = ?', [req.openid]);
+    await pool.query('DELETE FROM gifts WHERE openid = ?', [req.openid]);
+    res.json({ code: 0, msg: 'ok' });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ code: 500, msg: 'clear failed' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('libook-server running');
 });

@@ -27,7 +27,11 @@ App({
                        store.getReceives().length > 0 ||
                        store.getGifts().length > 0;
       const migrated = wx.getStorageSync('lb_cloud_migrated');
-      if (hasLocal && !migrated) {
+      const cleared = wx.getStorageSync('lb_cleared_' + openid);
+      if (cleared) {
+        // 用户已主动清空数据，不自动拉取，等用户有新数据后再正常同步
+        console.log('[启动] 检测到清空标记，跳过云端拉取');
+      } else if (hasLocal && !migrated) {
         // 老用户首次：本地数据推送到云端
         store.pushToCloud().then(r => {
           if (r) wx.setStorageSync('lb_cloud_migrated', Date.now());

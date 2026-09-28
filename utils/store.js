@@ -88,6 +88,7 @@ function addBook(name, date) {
   };
   list.unshift(book);
   saveBooks(list);
+  clearClearedFlag();
   if (cloudOk()) silent(api().addBook(book), 'addBook', { type: 'books', id: book.id });
   return book;
 }
@@ -132,6 +133,7 @@ function addReceive(data) {
   }, data);
   all.push(rec);
   write(KEYS.RECEIVES, all);
+  clearClearedFlag();
   if (cloudOk()) silent(api().addReceive(rec), 'addReceive', { type: 'receives', id: rec.id });
   return rec;
 }
@@ -170,6 +172,7 @@ function addGift(data) {
   }, data);
   all.push(g);
   write(KEYS.GIFTS, all);
+  clearClearedFlag();
   if (cloudOk()) silent(api().addGift(g), 'addGift', { type: 'gifts', id: g.id });
   return g;
 }
@@ -478,11 +481,31 @@ function pushToCloud() {
 }
 
 // ---------------- 清空当前用户数据 ----------------
+// 同时清空本地存储和云端数据，并设置标记阻止重启后自动拉取
 function clearAll() {
   const openid = getCurrentOpenid();
+  // 1. 清空本地存储
   Object.values(KEYS).forEach(key => {
     wx.removeStorageSync(`lb_${openid}_${key}`);
   });
+  // 2. 设置"已清空"标记，阻止 app.js 启动时 pullFromCloud 自动恢复
+  wx.setStorageSync('lb_cleared_' + openid, Date.now());
+  // 3. 清空脏数据标记
+  wx.removeStorageSync(DIRTY_KEY);
+  // 4. 异步清空云端数据（失败不阻塞，用户可手动同步再清）
+  if (cloudOk()) {
+    api().clearAll().then(() => {
+      console.log('[清空] 云端数据已清除');
+    }).catch(err => {
+      console.warn('[清空] 云端清除失败，下次同步会重试:', err && err.message);
+    });
+  }
+}
+
+// 用户重新添加数据后，清除"已清空"标记，恢复正常同步
+function clearClearedFlag() {
+  const openid = getCurrentOpenid();
+  wx.removeStorageSync('lb_cleared_' + openid);
 }
 
 // ---------------- 获取用户列表（管理功能） ----------------

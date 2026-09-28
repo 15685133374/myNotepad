@@ -1,18 +1,30 @@
 <view class="page">
-  <view class="card">
-    <view class="section-title">云端备份</view>
-    <view class="section-desc">数据加密存储在微信云托管，换手机也不怕丢</view>
-    <button class="btn btn-green block" bindtap="cloudBackup">备份到云端</button>
-    <button class="btn btn-plain block" bindtap="cloudRestore">从云端恢复</button>
+  <!-- 云端同步 -->
+  <view class="card" wx:if="{{cloudEnabled}}">
+    <view class="section-title">云端同步</view>
+    <view class="section-desc">数据自动加密备份到云端，换手机也能恢复</view>
+    <view class="sync-status">
+      <view class="sync-status-text">
+        <block wx:if="{{syncing}}">正在同步...</block>
+        <block wx:elif="{{pendingCount > 0}}">{{pendingCount}} 条待同步</block>
+        <block wx:else>全部数据已同步 ✓</block>
+      </view>
+      <view class="sync-time" wx:if="{{lastSyncTime}}">上次同步：{{lastSyncTime}}</view>
+    </view>
+    <button class="btn btn-green block" bindtap="syncNow" loading="{{syncing}}">
+      {{syncing ? '同步中...' : '立即同步'}}
+    </button>
   </view>
 
+  <!-- 本地备份 -->
   <view class="card">
-    <view class="section-title">数据备份</view>
-    <view class="section-desc">将当前用户的所有数据导出为 JSON 格式，可以复制保存到其他地方</view>
+    <view class="section-title">本地备份</view>
+    <view class="section-desc">导出数据到剪贴板，可粘贴保存到其他地方；或从备份恢复</view>
     <button class="btn btn-green block" bindtap="exportData">导出数据</button>
     <button class="btn btn-plain block" bindtap="importData">导入数据</button>
   </view>
 
+  <!-- 用户列表 -->
   <view class="card" wx:if="{{users.length > 1}}">
     <view class="section-title">用户列表</view>
     <view class="section-desc">本设备上使用过的用户（家庭共享）</view>
@@ -27,11 +39,6 @@
         <view class="user-action">查看数据 ›</view>
       </view>
     </view>
-  </view>
-
-  <view class="card">
-    <view class="section-title">数据统计</view>
-    <button class="btn btn-plain block" bindtap="viewStats">查看统计图表</button>
   </view>
 
   <!-- 导出数据弹窗 -->

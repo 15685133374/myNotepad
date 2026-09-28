@@ -110,9 +110,10 @@ function addGift(gift) { return call('/api/gifts', 'POST', gift); }
 function updateGift(id, patch) { return call(`/api/gifts/${id}`, 'PUT', patch); }
 function deleteGift(id) { return call(`/api/gifts/${id}`, 'DELETE'); }
 
-// ---------------- 同步 / 导出 ----------------
+// ---------------- 同步 / 导出 / 清空 ----------------
 function syncAll(data) { return call('/api/sync', 'POST', data); }
 function exportAll() { return call('/api/export'); }
+function clearAll() { return call('/api/clear', 'DELETE'); }
 
 module.exports = {
   ENV, SERVICE, CLOUD_ENABLED,
@@ -120,5 +121,5 @@ module.exports = {
   getBooks, addBook, updateBook, deleteBook,
   getReceives, addReceive, updateReceive, deleteReceive,
   getGifts, addGift, updateGift, deleteGift,
-  syncAll, exportAll
+  syncAll, exportAll, clearAll
 };

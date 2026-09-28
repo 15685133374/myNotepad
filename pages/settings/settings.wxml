@@ -16,8 +16,16 @@
     <view class="cell-right">搜索全部记录 ›</view>
   </view>
   <view class="cell" bindtap="goBackup">
-    <view class="cell-left"><text class="cell-icon">💾</text>数据管理</view>
-    <view class="cell-right">备份 · 导入 · 用户 ›</view>
+    <view class="cell-left"><text class="cell-icon">☁️</text>数据管理</view>
+    <view class="cell-right">
+      <block wx:if="{{cloudEnabled}}">
+        <block wx:if="{{syncing}}">同步中...</block>
+        <block wx:elif="{{pendingCount > 0}}">{{pendingCount}} 条待同步</block>
+        <block wx:else>已同步 ✓</block>
+      </block>
+      <block wx:else>备份 · 恢复</block>
+      ›
+    </view>
   </view>
 </view>
 
@@ -29,17 +37,6 @@
   <view class="cell" bindtap="clearAll">
     <view class="cell-left"><text class="cell-icon">🗑️</text>清空数据</view>
     <view class="cell-right danger">删除全部记录 ›</view>
-  </view>
-</view>
-
-<view class="card" wx:if="{{cloudEnabled}}">
-  <view class="cell" bindtap="syncNow">
-    <view class="cell-left"><text class="cell-icon">☁️</text>云端同步</view>
-    <view class="cell-right">
-      <block wx:if="{{syncing}}">同步中...</block>
-      <block wx:elif="{{pendingCount > 0}}">{{pendingCount}} 条待同步 ›</block>
-      <block wx:else>已全部同步 ✓</block>
-    </view>
   </view>
 </view>
 
