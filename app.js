@@ -12,7 +12,8 @@ App({
       wx.cloud.init({ env: 'prod-d5gu9xtoxaabb6a55', traceUser: true });
     }
     this.wxLogin();
-    this.cloudInit();
+    // 延迟执行 cloudInit，确保 wxLogin 已生成本地 openid，避免 /api/login 时 X-WX-OPENID 为空
+    setTimeout(() => this.cloudInit(), 50);
     // 延迟检查密码锁，确保页面栈已准备好
     setTimeout(() => this.checkLock(), 100);
   },
