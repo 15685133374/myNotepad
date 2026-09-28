@@ -9,6 +9,10 @@ const SERVICE = 'express-3p5x';
 // 是否启用云端（关掉则全部走本地存储，便于开发期切换）
 const CLOUD_ENABLED = true;
 
+// 本地开发模式：true=调用本地 Docker 服务，false=调用微信云托管
+const LOCAL_DEV = true;
+const LOCAL_BASE = 'http://localhost';
+
 /**
  * 调用云托管接口
  * @param {string} path 接口路径，如 /api/books
@@ -20,6 +24,38 @@ function call(path, method = 'GET', data = {}) {
     if (!CLOUD_ENABLED) {
       return reject(new Error('cloud disabled'));
     }
+
+    // 本地开发模式：用 wx.request 调用本地 Docker 服务
+    if (LOCAL_DEV) {
+      const openid = wx.getStorageSync('lb_openid') || '';
+      // GET 请求把 data 拼到 query
+      let url = LOCAL_BASE + path;
+      if (method === 'GET' && data && Object.keys(data).length > 0) {
+        const qs = Object.keys(data).map(k => `${k}=${encodeURIComponent(data[k])}`).join('&');
+        url += (path.includes('?') ? '&' : '?') + qs;
+      }
+      wx.request({
+        url,
+        method,
+        data: method === 'GET' ? {} : data,
+        header: {
+          'content-type': 'application/json',
+          'X-WX-OPENID': openid  // 模拟云托管注入的 openid
+        },
+        success: (res) => {
+          const body = res.data || {};
+          if (body.code === 0) {
+            resolve(body.data);
+          } else {
+            reject(new Error(body.msg || `code ${body.code}`));
+          }
+        },
+        fail: reject
+      });
+      return;
+    }
+
+    // 云托管模式
     if (!wx.cloud || !wx.cloud.callContainer) {
       return reject(new Error('基础库过低，不支持 wx.cloud.callContainer（需 2.23.0+）'));
     }
