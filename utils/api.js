@@ -11,7 +11,7 @@ const CLOUD_ENABLED = true;
 
 // 本地开发模式：true=调用本地 Docker 服务，false=调用微信云托管
 const LOCAL_DEV = true;
-const LOCAL_BASE = 'http://localhost';
+const LOCAL_BASE = 'http://localhost:3000';
 
 /**
  * 调用云托管接口
