@@ -3,12 +3,25 @@
   <view class="title">{{mode === 'set' ? '设置密码锁' : '输入密码解锁'}}</view>
   <view class="desc">{{mode === 'set' ? '开启后，每次进入小程序都需要验证密码' : '请输入你设置的密码'}}</view>
 
-  <input class="pwd-input" password type="number" maxlength="12" placeholder="请输入密码" placeholder-style="color:#999" cursor-color="#327E36" value="{{pwd}}" bindinput="onPwd" focus />
+  <!-- 指纹/面容解锁 -->
+  <view wx:if="{{mode === 'unlock' && soterEnabled && lockCountdown === 0}}" class="soter-section">
+    <button class="soter-btn" bindtap="trySoter">
+      <text class="soter-icon">👆</text>
+      <text>生物识别解锁</text>
+    </button>
+    <view class="soter-divider">或输入密码</view>
+  </view>
+
+  <input class="pwd-input" password type="number" maxlength="12" placeholder="请输入密码" placeholder-style="color:#999" cursor-color="#327E36" value="{{pwd}}" bindinput="onPwd" disabled="{{lockCountdown > 0}}" />
   <input wx:if="{{mode === 'set'}}" class="pwd-input" password type="number" maxlength="12" placeholder="请再次输入密码" placeholder-style="color:#999" cursor-color="#327E36" value="{{pwd2}}" bindinput="onPwd2" />
 
   <view wx:if="{{error}}" class="error">{{error}}</view>
 
-  <button class="btn btn-green block confirm-btn" bindtap="confirm">{{mode === 'set' ? '开启密码锁' : '解锁'}}</button>
+  <button class="btn btn-green block confirm-btn" bindtap="confirm" disabled="{{lockCountdown > 0}}">{{mode === 'set' ? '开启密码锁' : '解锁'}}</button>
 
-  <view wx:if="{{mode === 'unlock'}}" class="forgot" bindtap="resetAll">忘记密码？清空数据并重置</view>
+  <!-- 忘记密码入口：暂时隐藏。
+       原因：resetAll() 里的 wx.login 只在本地拿 code，未发服务器校验（code2Session），
+       任何人点"忘记密码"都能直接关掉密码锁，验证形同虚设。
+       待接入后端校验（本地 Docker 或云托管均可）后再放开。 -->
+  <!-- <view wx:if="{{mode === 'unlock'}}" class="forgot" bindtap="resetAll">忘记密码？验证身份并重置</view> -->
 </view>

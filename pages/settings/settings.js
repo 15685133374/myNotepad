@@ -9,7 +9,7 @@ Page({
     cloudEnabled: false,
     pendingCount: 0,
     syncing: false,
-    aboutText: '一款免费、无广告的人情往来记账小程序。\n\n· 礼簿管理：为婚宴、寿宴等场合独立记账\n· 收送统计：自动汇总现金 / 微信收入支出\n· 人员往来：自动计算与每个人的人情结余\n· 全局检索：快速查找任意记录\n· 数据可视化：条形图与扇形图直观展示\n· 云端同步：自动备份，换机一键恢复\n· 本地备份：导出导入，离线也能备份\n· 密码锁：保护你的隐私数据\n\n数据优先存储在本机，联网时自动加密备份到云端，换手机也能恢复。'
+    aboutText: '一款免费、无广告的人情往来记账小程序。\n\n· 礼簿管理：为婚宴、寿宴等场合独立记账\n· 收送统计：自动汇总现金 / 微信收入支出\n· 人员往来：自动计算与每个人的人情结余\n· 全局检索：快速查找任意记录\n· 数据可视化：条形图与扇形图直观展示\n· 云端同步：自动备份，换机一键恢复\n· 本地备份：导出导入，离线也能备份\n· 密码锁：密码加密存储 + 指纹/面容解锁\n\n数据优先存储在本机，联网时自动加密备份到云端，换手机也能恢复。'
   },
   onShow() {
     const app = getApp();
@@ -49,6 +49,8 @@ Page({
       success: (r) => {
         if (r.confirm) {
           wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
+          const openid = store.getCurrentOpenid();
+          wx.removeStorageSync('lb_soter_' + openid);
           this.setData({ hasPassword: false });
           wx.showToast({ title: '已关闭', icon: 'success' });
         }

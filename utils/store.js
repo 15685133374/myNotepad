@@ -46,6 +46,22 @@ function genId() {
   return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 }
 
+// ---------------- 密码加密 ----------------
+// 简单 hash，不依赖第三方库，防止明文存储被直接读取
+function hashPwd(pwd) {
+  let h = 5381;
+  for (let i = 0; i < pwd.length; i++) {
+    h = ((h << 5) + h) + pwd.charCodeAt(i);
+    h |= 0;
+  }
+  return 'h' + Math.abs(h).toString(36);
+}
+
+// 验证密码
+function verifyPwd(input, stored) {
+  return hashPwd(input) === stored;
+}
+
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
 function fmtDate(ts) {
@@ -533,6 +549,7 @@ function getAllUsers() {
 module.exports = {
   KEYS,
   fmtDate, fmtTime, fmtMoney,
+  hashPwd, verifyPwd,
   getBooks, getBook, addBook, updateBook, deleteBook,
   getReceives, getReceive, addReceive, updateReceive, deleteReceive,
   getGifts, getGift, addGift, updateGift, deleteGift,

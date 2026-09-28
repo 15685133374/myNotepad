@@ -33,3 +33,35 @@ page { background: #4CAF50; }
   margin-top: 40rpx;
   text-decoration: underline;
 }
+
+.soter-section {
+  width: 100%;
+  margin-bottom: 16rpx;
+}
+
+.soter-btn {
+  width: 100%;
+  background: rgba(255,255,255,.15);
+  border: 2rpx solid rgba(255,255,255,.3);
+  border-radius: 12rpx;
+  color: #fff;
+  font-size: 30rpx;
+  padding: 20rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.soter-btn::after { border: none; }
+
+.soter-icon {
+  font-size: 36rpx;
+  margin-right: 12rpx;
+}
+
+.soter-divider {
+  text-align: center;
+  color: rgba(255,255,255,.5);
+  font-size: 24rpx;
+  margin: 24rpx 0 8rpx;
+}
