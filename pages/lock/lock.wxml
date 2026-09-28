@@ -19,9 +19,7 @@
 
   <button class="btn btn-green block confirm-btn" bindtap="confirm" disabled="{{lockCountdown > 0}}">{{mode === 'set' ? '开启密码锁' : '解锁'}}</button>
 
-  <!-- 忘记密码入口：暂时隐藏。
-       原因：resetAll() 里的 wx.login 只在本地拿 code，未发服务器校验（code2Session），
-       任何人点"忘记密码"都能直接关掉密码锁，验证形同虚设。
-       待接入后端校验（本地 Docker 或云托管均可）后再放开。 -->
-  <!-- <view wx:if="{{mode === 'unlock'}}" class="forgot" bindtap="resetAll">忘记密码？验证身份并重置</view> -->
+  <!-- 忘记密码：wx.login code 发后端 /api/auth/verify 做 code2Session 校验，比对通过才关锁。
+       本地 Docker 联调时服务端未配置 WX_APPID/WX_SECRET 会直接放行（mockPass，仅测试用）。 -->
+  <view wx:if="{{mode === 'unlock'}}" class="forgot" bindtap="resetAll">忘记密码？验证身份并重置</view>
 </view>

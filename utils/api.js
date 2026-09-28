@@ -86,6 +86,11 @@ function login() {
   return call('/api/login', 'GET');
 }
 
+// 忘记密码身份校验：wx.login 的 code 发后端做 code2Session 比对
+function verifyAuth(code) {
+  return call('/api/auth/verify', 'POST', { code });
+}
+
 function saveProfile(nickname, avatar) {
   return call('/api/user/profile', 'POST', { nickname, avatar });
 }
@@ -117,7 +122,7 @@ function clearAll() { return call('/api/clear', 'DELETE'); }
 
 module.exports = {
   ENV, SERVICE, CLOUD_ENABLED,
-  call, login, saveProfile,
+  call, login, saveProfile, verifyAuth,
   getBooks, addBook, updateBook, deleteBook,
   getReceives, addReceive, updateReceive, deleteReceive,
   getGifts, addGift, updateGift, deleteGift,

@@ -149,13 +149,9 @@ Page({
   },
 
   // 忘记密码：通过微信身份验证后关闭密码锁（不清空数据）
-  // ⚠️ 暂时弃用：wxml 入口已注释隐藏。
-  // wx.login 只是本地拿 code，并未发给服务器做 code2Session 校验，
-  // 任何人点"忘记密码"都会"验证通过"直接关锁，验证形同虚设。
-  // 后续接入后端（本地 Docker 调试或云托管）后：
-  //   1. 把 loginRes.code 发到 POST /api/auth/verify
-  //   2. 服务端调微信 code2Session 换真实 openid，与机主 openid 比对
-  //   3. 比对一致才返回允许关锁，前端再执行下面的清除逻辑
+  // 流程：wx.login 拿 code -> 发后端 /api/auth/verify 做 code2Session 校验
+  // -> 服务端比对真实 openid 与当前数据主人 openid，一致才允许关锁。
+  // 本地 Docker 联调：服务端未配置 WX_APPID/WX_SECRET 时返回 mockPass=true 直接放行（仅测试用）。
   resetAll() {
     wx.showModal({
       title: '忘记密码',
@@ -164,24 +160,36 @@ Page({
       success: (r) => {
         if (!r.confirm) return;
         wx.showLoading({ title: '验证中...', mask: true });
-        // 调用微信登录验证身份
+        // 第一步：微信登录拿临时 code（静默接口，无需用户授权）
         wx.login({
           success: (loginRes) => {
-            wx.hideLoading();
-            if (loginRes.code) {
-              // 验证通过，关闭密码锁
-              wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
-              wx.removeStorageSync('lb_lock_err_count');
-              wx.removeStorageSync('lb_lock_until');
-              const openid = store.getCurrentOpenid();
-              wx.removeStorageSync('lb_soter_' + openid);
-              getApp().globalData.unlocked = true;
-              wx.setStorageSync('lb_unlock_time', Date.now());
-              wx.showToast({ title: '密码锁已关闭', icon: 'success' });
-              setTimeout(() => wx.reLaunch({ url: '/pages/index/index' }), 1000);
-            } else {
+            if (!loginRes.code) {
+              wx.hideLoading();
               wx.showToast({ title: '验证失败，请重试', icon: 'none' });
+              return;
             }
+            // 第二步：code 发后端校验（code2Session 换真实 openid 并比对）
+            store.apiVerifyAuth(loginRes.code).then(data => {
+              wx.hideLoading();
+              if (data && data.pass) {
+                // 验证通过，关闭密码锁
+                wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
+                wx.removeStorageSync('lb_lock_err_count');
+                wx.removeStorageSync('lb_lock_until');
+                const openid = store.getCurrentOpenid();
+                wx.removeStorageSync('lb_soter_' + openid);
+                getApp().globalData.unlocked = true;
+                wx.setStorageSync('lb_unlock_time', Date.now());
+                wx.showToast({ title: '密码锁已关闭', icon: 'success' });
+                setTimeout(() => wx.reLaunch({ url: '/pages/index/index' }), 1000);
+              } else {
+                wx.showToast({ title: '身份验证不通过，无法重置', icon: 'none' });
+              }
+            }).catch(err => {
+              wx.hideLoading();
+              console.warn('[忘记密码] 后端校验失败：', err && err.message);
+              wx.showToast({ title: '验证服务不可用，请稍后再试', icon: 'none' });
+            });
           },
           fail: () => {
             wx.hideLoading();

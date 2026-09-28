@@ -425,6 +425,12 @@ function flushDirty() {
   });
 }
 
+// 忘记密码身份校验：转发到后端 /api/auth/verify（code2Session 比对 openid）
+function apiVerifyAuth(code) {
+  if (!api()) return Promise.reject(new Error('api not available'));
+  return api().verifyAuth(code);
+}
+
 // 登录并获取云端 openid
 // 若云端 openid 与本地不同（首次上云 / 换身份），自动把旧身份名下的本地数据迁移到新身份名下
 function cloudLogin() {
@@ -557,5 +563,6 @@ module.exports = {
   getAllNames, personRecords, rangeStart, searchAll, clearAll,
   getCurrentOpenid, getAllUsers, getUserKey,
   cloudLogin, pullFromCloud, pushToCloud, cloudOk,
+  apiVerifyAuth,
   getPendingCount, flushDirty
 };
