@@ -53,42 +53,36 @@ function num(v) { const n = Number(v); return isNaN(n) ? 0 : n; }
 function ts(v, def = Date.now()) { const n = Number(v); return isNaN(n) || n <= 0 ? def : n; }
 
 // ---------------- 身份校验（忘记密码用） ----------------
-// 小程序端 wx.login 拿 code 发到这里，服务端调微信 code2Session 换真实 openid，
-// 与请求头里的 openid 比对：一致说明"拿手机的人"和"数据主人"是同一个微信账号。
-// 本地 Docker 联调时 X-WX-OPENID 是前端模拟注入的，无法真正比对，返回 mockPass=true 便于测试。
-const WX_APPID = process.env.WX_APPID || '';
-const WX_SECRET = process.env.WX_SECRET || '';
+// 架构：多模式预留，通过 AUTH_MODE 环境变量切换
+//   mock        本地联调，直接放行（默认）
+//   code2session 微信登录 code 换 openid 比对（个人主体可用）
+//   face        人脸核身（预留，需企业主体 + 行业资质）
+//   pay         微信支付密码验证（预留，需企业主体 + 商户号）
+const { verifyIdentity, config: authConfig } = require('./auth');
 
 app.post('/api/auth/verify', async (req, res) => {
-  const { code } = req.body || {};
+  const { code, mode, faceVerifyResult, payAuthCode } = req.body || {};
   const openid = getOpenid(req);
-  if (!code) return res.status(400).json({ code: 400, msg: 'code required' });
   if (!openid) return res.status(401).json({ code: 401, msg: 'missing openid' });
 
-  // 本地联调模式：未配置 WX_APPID/WX_SECRET 时直接放行（仅用于测试）
-  if (!WX_APPID || !WX_SECRET) {
-    console.log('[auth/verify] 本地联调模式：未配置 WX_APPID/WX_SECRET，直接放行');
-    return res.json({ code: 0, data: { pass: true, mockPass: true } });
-  }
-
   try {
-    const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${WX_APPID}&secret=${WX_SECRET}&js_code=${encodeURIComponent(code)}&grant_type=authorization_code`;
-    const r = await fetch(url);
-    const data = await r.json();
-    if (data.errcode) {
-      return res.status(400).json({ code: 400, msg: `code2session failed: ${data.errcode} ${data.errmsg}` });
-    }
-    if (!data.openid) {
-      return res.status(400).json({ code: 400, msg: 'code2session no openid' });
-    }
-    // 比对：code 换出的真实 openid 与当前数据主人 openid 是否一致
-    const pass = data.openid === openid;
-    console.log(`[auth/verify] openid 比对：${data.openid} vs ${openid} => ${pass ? '一致' : '不一致'}`);
-    res.json({ code: 0, data: { pass } });
+    const result = await verifyIdentity({ mode, code, openid, faceVerifyResult, payAuthCode });
+    res.json({ code: 0, data: result });
   } catch (e) {
     console.error(e);
     res.status(500).json({ code: 500, msg: 'verify failed' });
   }
+});
+
+// 认证模式查询（前端可据此展示不同入口）
+app.get('/api/auth/mode', (req, res) => {
+  res.json({
+    code: 0,
+    data: {
+      currentMode: process.env.AUTH_MODE || 'mock',
+      available: authConfig
+    }
+  });
 });
 
 // ---------------- 登录 / 用户 ----------------

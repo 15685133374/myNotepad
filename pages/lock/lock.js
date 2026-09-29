@@ -157,7 +157,7 @@ Page({
     wx.showModal({
       title: '忘记密码',
       content: '将通过微信身份验证关闭密码锁，数据不受影响，验证后可重新设置密码。是否继续？',
-      confirmText: '验证并关闭',
+      confirmText: '验证关闭',
       success: (r) => {
         console.log('[忘记密码] showModal success:', JSON.stringify(r));
         if (!r.confirm) return;
@@ -170,7 +170,7 @@ Page({
               wx.showToast({ title: '验证失败，请重试', icon: 'none' });
               return;
             }
-            store.apiVerifyAuth(loginRes.code).then(data => {
+            store.apiVerifyAuth({ code: loginRes.code }).then(data => {
               console.log('[忘记密码] 后端返回:', JSON.stringify(data));
               wx.hideLoading();
               if (data && data.pass) {
