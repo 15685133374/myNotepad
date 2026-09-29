@@ -9,18 +9,29 @@ Page({
     cloudEnabled: false,
     pendingCount: 0,
     syncing: false,
-    aboutText: '一款免费、无广告的人情往来记账小程序。\n\n· 礼簿管理：为婚宴、寿宴等场合独立记账\n· 收送统计：自动汇总现金 / 微信收入支出\n· 人员往来：自动计算与每个人的人情结余\n· 全局检索：快速查找任意记录\n· 数据可视化：条形图与扇形图直观展示\n· 本地备份：导出导入，离线也能备份\n· 密码锁：密码加密存储 + 指纹/面容解锁\n\n数据保存在本机，安全可靠。联网时支持云端同步（需配置服务器）。'
+    aboutText: ''
   },
   onShow() {
     const app = getApp();
     const openid = store.getCurrentOpenid();
+    const cloudEnabled = store.cloudOk();
     this.setData({
       hasPassword: !!wx.getStorageSync(store.getUserKey(store.KEYS.PASSWORD)),
       userInfo: app.globalData.userInfo,
       openid: openid,
-      cloudEnabled: store.cloudOk(),
-      pendingCount: store.getPendingCount()
+      cloudEnabled: cloudEnabled,
+      pendingCount: store.getPendingCount(),
+      lastSyncTime: wx.getStorageSync('lb_last_sync_time_' + openid) || '',
+      aboutText: this.buildAboutText(cloudEnabled)
     });
+  },
+
+  buildAboutText(cloudEnabled) {
+    const base = '一款免费、无广告的人情往来记账小程序。\n\n· 礼簿管理：为婚宴、寿宴等场合独立记账\n· 收送统计：自动汇总现金 / 微信收入支出\n· 人员往来：自动计算与每个人的人情结余\n· 全局检索：快速查找任意记录\n· 数据可视化：条形图与扇形图直观展示\n· 本地备份：导出导入，离线也能备份\n· 密码锁：密码加密存储 + 指纹/面容解锁';
+    if (cloudEnabled) {
+      return base + '\n· 云端同步：自动备份，换机恢复\n\n数据保存在本机，联网时自动云端备份，换手机也能恢复。';
+    }
+    return base + '\n\n数据保存在本机，安全可靠。连接后台服务后可启用云端同步。';
   },
 
   goStats() {

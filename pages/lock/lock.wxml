@@ -29,7 +29,7 @@
   <button class="btn btn-green block confirm-btn" bindtap="confirm" disabled="{{lockCountdown > 0}}">{{mode === 'set' ? '开启密码锁' : '解锁'}}</button>
 
   <!-- 忘记密码入口 -->
-  <view wx:if="{{mode === 'unlock' && !showSecurityVerify}}" class="forgot" bindtap="resetAll">忘记密码？验证身份并重置</view>
+  <view wx:if="{{mode === 'unlock' && !showSecurityVerify}}" class="forgot" bindtap="resetAll">忘记密码？{{cloudEnabled ? '微信验证重置' : '安全问题重置'}}</view>
 
   <!-- 安全问题验证界面 -->
   <view wx:if="{{showSecurityVerify}}" class="security-verify">
