@@ -15,11 +15,31 @@
   <input class="pwd-input" password type="number" maxlength="12" placeholder="请输入密码" placeholder-style="color:#999" cursor-color="#327E36" value="{{pwd}}" bindinput="onPwd" disabled="{{lockCountdown > 0}}" />
   <input wx:if="{{mode === 'set'}}" class="pwd-input" password type="number" maxlength="12" placeholder="请再次输入密码" placeholder-style="color:#999" cursor-color="#327E36" value="{{pwd2}}" bindinput="onPwd2" />
 
+  <!-- 安全问题（设置密码时） -->
+  <view wx:if="{{mode === 'set'}}" class="security-section">
+    <view class="security-label">安全问题（忘记密码时用于验证身份）</view>
+    <picker bindchange="onSecurityQuestionChange" value="0" range="{{securityOptions}}">
+      <view class="picker-item">{{securityQuestion || '请选择安全问题'}}</view>
+    </picker>
+    <input class="pwd-input security-answer" type="text" maxlength="20" placeholder="请输入答案" placeholder-style="color:#999" value="{{securityAnswer}}" bindinput="onSecurityAnswer" />
+  </view>
+
   <view wx:if="{{error}}" class="error">{{error}}</view>
 
   <button class="btn btn-green block confirm-btn" bindtap="confirm" disabled="{{lockCountdown > 0}}">{{mode === 'set' ? '开启密码锁' : '解锁'}}</button>
 
-  <!-- 忘记密码：wx.login code 发后端 /api/auth/verify 做 code2Session 校验，比对通过才关锁。
-       本地 Docker 联调时服务端未配置 WX_APPID/WX_SECRET 会直接放行（mockPass，仅测试用）。 -->
-  <view wx:if="{{mode === 'unlock'}}" class="forgot" bindtap="resetAll">忘记密码？验证身份并重置</view>
+  <!-- 忘记密码入口 -->
+  <view wx:if="{{mode === 'unlock' && !showSecurityVerify}}" class="forgot" bindtap="resetAll">忘记密码？验证身份并重置</view>
+
+  <!-- 安全问题验证界面 -->
+  <view wx:if="{{showSecurityVerify}}" class="security-verify">
+    <view class="security-verify-title">安全问题验证</view>
+    <view class="security-verify-q">{{verifyQuestion}}</view>
+    <input class="pwd-input" type="text" maxlength="20" placeholder="请输入答案" placeholder-style="color:#999" value="{{verifyAnswer}}" bindinput="onVerifyAnswer" />
+    <view wx:if="{{error}}" class="error">{{error}}</view>
+    <view class="security-verify-btns">
+      <button class="btn-cancel" bindtap="cancelSecurityVerify">取消</button>
+      <button class="btn btn-green" bindtap="confirmSecurityVerify">验证</button>
+    </view>
+  </view>
 </view>
