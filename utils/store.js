@@ -425,10 +425,16 @@ function flushDirty() {
   });
 }
 
-// 忘记密码身份校验：转发到后端 /api/auth/verify（code2Session 比对 openid）
-function apiVerifyAuth(code) {
+// 忘记密码身份校验：转发到后端 /api/auth/verify，支持多模式
+function apiVerifyAuth(params) {
   if (!api()) return Promise.reject(new Error('api not available'));
-  return api().verifyAuth(code);
+  return api().verifyAuth(params);
+}
+
+// 查询当前认证模式
+function apiGetAuthMode() {
+  if (!api()) return Promise.resolve({ currentMode: 'mock', available: {} });
+  return api().getAuthMode();
 }
 
 // 登录并获取云端 openid
@@ -563,6 +569,6 @@ module.exports = {
   getAllNames, personRecords, rangeStart, searchAll, clearAll,
   getCurrentOpenid, getAllUsers, getUserKey,
   cloudLogin, pullFromCloud, pushToCloud, cloudOk,
-  apiVerifyAuth,
+  apiVerifyAuth, apiGetAuthMode,
   getPendingCount, flushDirty
 };
