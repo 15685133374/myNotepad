@@ -145,15 +145,14 @@ app.post('/api/books', auth, async (req, res) => {
   }
   const bookId = id ? str(id, 64) : genId();
   try {
+    // upsert：本地优先架构下前端可能重复发送相同 id，幂等处理避免 409
     await pool.query(
-      'INSERT INTO books (id, openid, name, created_at) VALUES (?, ?, ?, ?)',
+      `INSERT INTO books (id, openid, name, created_at) VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE name = VALUES(name), created_at = VALUES(created_at)`,
       [bookId, req.openid, str(name, 128), ts(createdAt)]
     );
     res.json({ code: 0, data: { id: bookId, name: str(name, 128), createdAt: ts(createdAt), openid: req.openid } });
   } catch (e) {
-    if (e.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ code: 409, msg: 'id exists' });
-    }
     res.status(500).json({ code: 500, msg: 'create failed' });
   }
 });
@@ -222,15 +221,17 @@ app.post('/api/receives', auth, async (req, res) => {
   if (!b.bookId) return res.status(400).json({ code: 400, msg: 'bookId required' });
   const id = b.id ? str(b.id, 64) : genId();
   try {
+    // upsert：本地优先架构下前端可能重复发送相同 id，幂等处理避免 409
     await pool.query(
       `INSERT INTO receives (id, openid, book_id, name, amount, pay_type, note, time)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE name = VALUES(name), amount = VALUES(amount),
+         pay_type = VALUES(pay_type), note = VALUES(note), time = VALUES(time)`,
       [id, req.openid, str(b.bookId, 64), str(b.name, 128), num(b.amount),
        str(b.payType, 16) || 'cash', str(b.note), ts(b.time)]
     );
     res.json({ code: 0, data: { id } });
   } catch (e) {
-    if (e.code === 'ER_DUP_ENTRY') return res.status(409).json({ code: 409, msg: 'id exists' });
     res.status(500).json({ code: 500, msg: 'create failed' });
   }
 });
@@ -281,15 +282,18 @@ app.post('/api/gifts', auth, async (req, res) => {
   const b = req.body || {};
   const id = b.id ? str(b.id, 64) : genId();
   try {
+    // upsert：本地优先架构下前端可能重复发送相同 id，幂等处理避免 409
     await pool.query(
       `INSERT INTO gifts (id, openid, name, event, amount, pay_type, date, note, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE name = VALUES(name), event = VALUES(event),
+         amount = VALUES(amount), pay_type = VALUES(pay_type), date = VALUES(date),
+         note = VALUES(note)`,
       [id, req.openid, str(b.name, 128), str(b.event, 128), num(b.amount),
        str(b.payType, 16) || 'cash', ts(b.date, 0), str(b.note), ts(b.createdAt)]
     );
     res.json({ code: 0, data: { id } });
   } catch (e) {
-    if (e.code === 'ER_DUP_ENTRY') return res.status(409).json({ code: 409, msg: 'id exists' });
     res.status(500).json({ code: 500, msg: 'create failed' });
   }
 });
