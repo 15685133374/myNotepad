@@ -153,49 +153,43 @@ Page({
   // -> 服务端比对真实 openid 与当前数据主人 openid，一致才允许关锁。
   // 本地 Docker 联调：服务端未配置 WX_APPID/WX_SECRET 时返回 mockPass=true 直接放行（仅测试用）。
   resetAll() {
-    wx.showModal({
-      title: '忘记密码',
-      content: '将通过微信身份验证关闭密码锁，数据不受影响，验证后可重新设置密码。是否继续？',
-      confirmText: '验证并关闭',
-      success: (r) => {
-        if (!r.confirm) return;
-        wx.showLoading({ title: '验证中...', mask: true });
-        // 第一步：微信登录拿临时 code（静默接口，无需用户授权）
-        wx.login({
-          success: (loginRes) => {
-            if (!loginRes.code) {
-              wx.hideLoading();
-              wx.showToast({ title: '验证失败，请重试', icon: 'none' });
-              return;
-            }
-            // 第二步：code 发后端校验（code2Session 换真实 openid 并比对）
-            store.apiVerifyAuth(loginRes.code).then(data => {
-              wx.hideLoading();
-              if (data && data.pass) {
-                // 验证通过，关闭密码锁
-                wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
-                wx.removeStorageSync('lb_lock_err_count');
-                wx.removeStorageSync('lb_lock_until');
-                const openid = store.getCurrentOpenid();
-                wx.removeStorageSync('lb_soter_' + openid);
-                getApp().globalData.unlocked = true;
-                wx.setStorageSync('lb_unlock_time', Date.now());
-                wx.showToast({ title: '密码锁已关闭', icon: 'success' });
-                setTimeout(() => wx.reLaunch({ url: '/pages/index/index' }), 1000);
-              } else {
-                wx.showToast({ title: '身份验证不通过，无法重置', icon: 'none' });
-              }
-            }).catch(err => {
-              wx.hideLoading();
-              console.warn('[忘记密码] 后端校验失败：', err && err.message);
-              wx.showToast({ title: '验证服务不可用，请稍后再试', icon: 'none' });
-            });
-          },
-          fail: () => {
-            wx.hideLoading();
-            wx.showToast({ title: '验证失败，请检查网络', icon: 'none' });
+    console.log('[忘记密码] resetAll 被点击，mode=', this.data.mode);
+    // 直接执行重置，跳过 showModal（排查弹窗不弹出的问题）
+    wx.showLoading({ title: '验证中...', mask: true });
+    wx.login({
+      success: (loginRes) => {
+        console.log('[忘记密码] wx.login 成功，code=', loginRes.code ? '有' : '无');
+        if (!loginRes.code) {
+          wx.hideLoading();
+          wx.showToast({ title: '验证失败，请重试', icon: 'none' });
+          return;
+        }
+        store.apiVerifyAuth(loginRes.code).then(data => {
+          console.log('[忘记密码] 后端返回:', JSON.stringify(data));
+          wx.hideLoading();
+          if (data && data.pass) {
+            wx.removeStorageSync(store.getUserKey(store.KEYS.PASSWORD));
+            wx.removeStorageSync('lb_lock_err_count');
+            wx.removeStorageSync('lb_lock_until');
+            const openid = store.getCurrentOpenid();
+            wx.removeStorageSync('lb_soter_' + openid);
+            getApp().globalData.unlocked = true;
+            wx.setStorageSync('lb_unlock_time', Date.now());
+            wx.showToast({ title: '密码锁已关闭', icon: 'success' });
+            setTimeout(() => wx.reLaunch({ url: '/pages/index/index' }), 1000);
+          } else {
+            wx.showToast({ title: '身份验证不通过', icon: 'none' });
           }
+        }).catch(err => {
+          wx.hideLoading();
+          console.warn('[忘记密码] 后端校验失败：', err && err.message);
+          wx.showToast({ title: '验证服务不可用', icon: 'none' });
         });
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.warn('[忘记密码] wx.login 失败：', err);
+        wx.showToast({ title: '验证失败，请检查网络', icon: 'none' });
       }
     });
   }
