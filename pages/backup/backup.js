@@ -23,23 +23,27 @@ Page({
 
   loadSyncStatus() {
     const cloudEnabled = store.cloudOk();
+    const openid = store.getCurrentOpenid();
     const pendingCount = store.getPendingCount();
-    const lastSyncTime = wx.getStorageSync('lb_last_sync_time') || '';
+    const lastSyncTime = wx.getStorageSync('lb_last_sync_time_' + openid) || '';
     this.setData({ cloudEnabled, pendingCount, lastSyncTime });
   },
 
-  // 立即同步（手动触发）
+  // 同步到云端：先推脏数据，再全量补一次，确保完全一致
   syncNow() {
     if (this.data.syncing) return;
     this.setData({ syncing: true });
-    store.flushDirty().then(left => {
+    const openid = store.getCurrentOpenid();
+    // 第一步：推脏数据（增量）
+    store.flushDirty().then(() => {
+      // 第二步：全量推送，确保旧数据也同步上去
+      return store.pushToCloud();
+    }).then(result => {
       const now = this.fmtNow();
-      wx.setStorageSync('lb_last_sync_time', now);
-      this.setData({ syncing: false, pendingCount: left, lastSyncTime: now });
-      wx.showToast({
-        title: left === 0 ? '同步成功' : `剩余 ${left} 条待同步`,
-        icon: left === 0 ? 'success' : 'none'
-      });
+      wx.setStorageSync('lb_last_sync_time_' + openid, now);
+      if (result) wx.setStorageSync('lb_cloud_migrated', Date.now());
+      this.setData({ syncing: false, pendingCount: 0, lastSyncTime: now });
+      wx.showToast({ title: '同步成功', icon: 'success' });
     }).catch(() => {
       this.setData({ syncing: false });
       wx.showToast({ title: '同步失败，请检查网络', icon: 'none' });

@@ -1,7 +1,19 @@
+const store = require('../../utils/store');
+
 Page({
   data: {
     current: 0,
-    features: [
+    cloudEnabled: false,
+    features: []
+  },
+
+  onLoad() {
+    const cloudEnabled = store.cloudOk();
+    this.setData({ cloudEnabled, features: this.buildFeatures(cloudEnabled) });
+  },
+
+  buildFeatures(cloudEnabled) {
+    const features = [
       {
         icon: '📒',
         title: '礼簿管理',
@@ -72,29 +84,42 @@ Page({
         icon: '🔐',
         title: '密码锁',
         desc: '应用密码 + 生物识别双重保护，防止他人偷看你的礼金数据。',
-        points: [
+        points: cloudEnabled ? [
           '自定义 4 位以上数字密码，加密存储',
           '支持指纹 / 面容一键解锁',
           '连续错误 5 次自动锁定 30 秒',
-          '忘记密码可通过微信验证身份重置，不清空数据',
+          '忘记密码可通过微信身份验证重置',
+          '切后台 5 分钟内免重复验证'
+        ] : [
+          '自定义 4 位以上数字密码，加密存储',
+          '支持指纹 / 面容一键解锁',
+          '连续错误 5 次自动锁定 30 秒',
+          '忘记密码可通过安全问题验证重置',
           '切后台 5 分钟内免重复验证'
         ]
-      },
-      {
+      }
+    ];
+
+    // 云端同步功能仅在连接后台服务时显示
+    if (cloudEnabled) {
+      features.push({
         icon: '☁️',
         title: '云端同步',
         desc: '数据自动加密备份到云端，换手机自动恢复，再也不怕丢。',
         points: [
           '联网时自动静默同步，无需手动操作',
           '设置页实时显示同步状态和待同步数量',
-          '支持手动"立即同步"，换机前点一下更安心',
+          '支持手动"同步到云端"，换机前点一下更安心',
           '新设备登录后自动从云端拉取全部数据'
         ]
-      },
+      });
+    }
+
+    features.push(
       {
         icon: '💾',
         title: '本地备份',
-        desc: '云端之外的兜底方案，导出数据到剪贴板，离线也能恢复。',
+        desc: '导出数据到剪贴板，离线也能恢复。',
         points: [
           '一键导出当前用户全部数据（JSON）',
           '支持从备份粘贴导入，恢复历史数据',
@@ -113,7 +138,9 @@ Page({
           '切换后自动加载对应用户数据'
         ]
       }
-    ]
+    );
+
+    return features;
   },
 
   swiperChange(e) {

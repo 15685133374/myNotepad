@@ -12,7 +12,7 @@
       <view class="sync-time" wx:if="{{lastSyncTime}}">上次同步：{{lastSyncTime}}</view>
     </view>
     <button class="btn btn-green block" bindtap="syncNow" loading="{{syncing}}">
-      {{syncing ? '同步中...' : '立即同步'}}
+      {{syncing ? '同步中...' : '同步到云端'}}
     </button>
   </view>
 

@@ -16,7 +16,7 @@
     <view class="cell-right">搜索全部记录 ›</view>
   </view>
   <view class="cell" bindtap="goBackup">
-    <view class="cell-left"><text class="cell-icon">☁️</text>数据管理</view>
+    <view class="cell-left"><text class="cell-icon">{{cloudEnabled ? '☁️' : '💾'}}</text>数据管理</view>
     <view class="cell-right">
       <block wx:if="{{cloudEnabled}}">
         <block wx:if="{{syncing}}">同步中...</block>

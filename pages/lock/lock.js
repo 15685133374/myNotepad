@@ -14,6 +14,7 @@ Page({
     lockCountdown: 0,          // 剩余秒数（用于显示）
     soterSupported: false,     // 是否支持生物识别
     soterEnabled: false,       // 用户是否开启了生物识别
+    cloudEnabled: false,       // 是否连接后台服务
     // 安全问题（本地降级方案）
     securityQuestion: '',      // 设置密码时选的问题
     securityAnswer: '',        // 设置密码时填的答案
@@ -33,7 +34,7 @@ Page({
 
   onLoad(options) {
     const mode = options.mode || 'set';
-    this.setData({ mode });
+    this.setData({ mode, cloudEnabled: store.cloudOk() });
     wx.setNavigationBarTitle({ title: mode === 'set' ? '设置密码锁' : '密码锁' });
     if (mode === 'unlock') {
       this.checkSoter();
@@ -192,10 +193,13 @@ Page({
     console.log('[忘记密码] resetAll 被点击，mode=', this.data.mode);
     const openid = store.getCurrentOpenid();
     const secQ = wx.getStorageSync('lb_sec_q_' + openid);
+    const cloudOk = store.cloudOk();
 
     wx.showModal({
       title: '忘记密码',
-      content: '将验证身份后关闭密码锁，数据不受影响。是否继续？',
+      content: cloudOk
+        ? '将通过微信身份验证关闭密码锁，数据不受影响。是否继续？'
+        : '将通过安全问题验证关闭密码锁，数据不受影响。是否继续？',
       confirmText: '继续',
       success: (r) => {
         if (!r.confirm) return;

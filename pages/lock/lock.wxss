@@ -113,9 +113,6 @@ page { background: #4CAF50; }
   gap: 20rpx;
   margin-top: 30rpx;
 }
-.security-verify-btns .btn {
-  flex: 1;
-}
 .btn-cancel {
   flex: 1;
   background: rgba(255,255,255,.2);
@@ -123,5 +120,17 @@ page { background: #4CAF50; }
   border-radius: 12rpx;
   font-size: 30rpx;
   padding: 20rpx 0;
+  text-align: center;
 }
 .btn-cancel::after { border: none; }
+.btn-confirm {
+  flex: 1;
+  background: #fff;
+  color: #4CAF50;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  padding: 20rpx 0;
+  text-align: center;
+}
+.btn-confirm::after { border: none; }
