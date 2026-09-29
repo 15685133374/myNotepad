@@ -34,6 +34,17 @@ services:
       MYSQL_PASSWORD: 123456
       MYSQL_DATABASE: libook
       TZ: Asia/Shanghai
+      # 身份认证模式：mock（默认，本地联调）| code2session | face | pay
+      AUTH_MODE: mock
+      # code2session 模式需要（个人主体可用）：填入小程序 AppID 和 AppSecret
+      WX_APPID: ""
+      WX_SECRET: ""
+      # 人脸核身（预留，需企业主体 + 行业资质）
+      FACE_VERIFY_APPID: ""
+      FACE_VERIFY_SECRET: ""
+      # 微信支付密码验证（预留，需企业主体 + 商户号）
+      WXPAY_MCHID: ""
+      WXPAY_APIV3_KEY: ""
     depends_on:
       mysql:
         condition: service_healthy
