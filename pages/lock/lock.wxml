@@ -39,7 +39,7 @@
     <view wx:if="{{error}}" class="error">{{error}}</view>
     <view class="security-verify-btns">
       <button class="btn-cancel" bindtap="cancelSecurityVerify">取消</button>
-      <button class="btn btn-green" bindtap="confirmSecurityVerify">验证</button>
+      <button class="btn-confirm" bindtap="confirmSecurityVerify">验证</button>
     </view>
   </view>
 </view>

@@ -5,7 +5,7 @@
     <view wx:if="{{nameSuggestions.length}}" class="suggest-list">
       <view wx:for="{{nameSuggestions}}" wx:key="*this" class="suggest-item" bindtap="pickName" data-name="{{item}}">{{item}}</view>
     </view>
-    <view wx:if="{{dupWarning}}" class="warning">提示：该礼簿中已存在「{{name}}」的记录，请确认是否为同一人</view>
+    <view wx:if="{{dupWarning}}" class="warning">提示：该礼簿中已存在「{{name}}」的记录，如非同一人，请在备注中填写地区/身份区分</view>
   </view>
 
   <view class="field">
@@ -33,7 +33,7 @@
 
   <view class="field">
     <view class="label">备注（选填）</view>
-    <input class="input" placeholder="如：大舅家" value="{{note}}" bindinput="onNote" maxlength="50" />
+    <input class="input" placeholder="如：北京、老家的、村东头，用于区分同名" value="{{note}}" bindinput="onNote" maxlength="50" />
   </view>
 </view>
 
