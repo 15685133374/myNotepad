@@ -9,7 +9,7 @@ const SERVICE = 'express-3p5x';
 // 是否启用云端（关掉则全部走本地存储，便于开发期切换）
 // true = 连接后台服务（本地 Docker 或云托管），支持同步
 // false = 纯本地缓存模式，不显示同步功能
-const CLOUD_ENABLED = true;
+const CLOUD_ENABLED = false;
 
 // 本地开发模式：true=调用本地 Docker 服务，false=调用微信云托管
 const LOCAL_DEV = true;
